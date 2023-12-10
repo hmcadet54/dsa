@@ -1,0 +1,2 @@
+
+            stc.push(infix[i]);

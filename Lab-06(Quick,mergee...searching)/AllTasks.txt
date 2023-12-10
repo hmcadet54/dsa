@@ -1,0 +1,24 @@
+Task 1:
+Given the array in the above-mentioned figure implement quick sort that simply chooses the middle
+element as the pivot and sort accordingly.
+
+
+Task 2:
+Given an array in the above figure of integers, sort the array in ascending as well as
+descending order and return it using radix sort
+
+
+Task 3
+Given an array of integers in the above mentioned figure, sort the array in ascending as well as
+descending order and return it using Merge sort.
+
+Task 4:
+Implement the above array, sort it and find the value corresponding to to your last two digits of the roll number
+(if its not in the array add a value somewhere in between the array) and find it via binary search.
+
+Tasks 5:
+Write code for interpolation and show the iterations for uniformly
+distributed array.
+Note: An array is considered as uniformly distributed when the difference
+between the elements is equal or almost same. Example 1: 1,2,3,4,5,6
+(Difference is 1)

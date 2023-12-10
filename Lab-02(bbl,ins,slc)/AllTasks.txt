@@ -1,0 +1,41 @@
+1- Given an array of strings arr[]. Sort given strings using Bubble Sort and display the sorted array.
+Take array[10]= {5,1,3,6,2,9,7,4,8,10}
+
+2- Develop C++ solution such that day month and year are taken as input for 5 records and perform
+Sorting Dates based on year using Selection Sort. Note: Input must be taken from user
+Example Input: Example Output:
+01/02/2022 4/07/2015
+5/01/2018 5/01/2018
+4/07/2015 12/10/2021
+12/10/2021 01/02/2022
+11/12/2023 11/12/2023
+
+3- In a bustling corporate office, the facilities management team is tasked with organizing the seating
+arrangements for employees based on their designations. The office layout consists of rows of
+computer desks, and each desk has a designated employee.
+The priority is to sort out the computer desks for employees using the Insertion Sort algorithm, with the
+designation determining the sorting order. The higher the designation, the closer the employee should
+be seated to the corner office. The designations and their corresponding priorities are as follows:
+1. CEO (Chief Executive Officer) - Highest Priority
+2. CTO (Chief Technology Officer)
+3. CFO (Chief Financial Officer)
+4. VP (Vice President)
+5. MGR (Manager)
+6. EMP (Employee) - Lowest Priority
+Here&#39;s the initial arrangement of employees&#39; desks from left to right:
+1. Employee (EMP)
+2. CFO (Chief Financial Officer)
+3. Manager (MGR)
+4. Employee (EMP)
+5. VP (Vice President)
+6. CTO (Chief Technology Officer)
+7. Manager (MGR)
+8. CEO (Chief Executive Officer)
+
+4- Attempt to do task 2 but with an Recursive approach.
+
+5- A clerk at a shipping company is charged with the task of rearranging a number of large
+crates in order of the time they are to be shipped out. Thus, the cost of compares is very low
+relative to the cost of exchanges (move the crates). The warehouse is nearly full: there is
+extra space sufficient to hold any one of the crates, but not two. Which sorting method should
+the clerk use? Implement this question via a user generated array?

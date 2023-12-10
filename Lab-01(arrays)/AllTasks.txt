@@ -1,0 +1,37 @@
+1. Implement a safe array of size 10 and add exceptional handling to the code to stop the user
+from adding additional elements if it exceeds the array size.
+
+2. Implement Jagged arrays from the above pseudocode by taking a size of 5 and resizing it two
+10 in each index.
+
+3. Suppose you are developing a bank account management system, and you have defined the
+BankAccount class with the required constructors. You need to demonstrate the use of these
+constructors in various scenarios.
+a) Default Constructor Usage:
+Create a default-initialized BankAccount object named account1. Print out the balance of
+account1.
+b) Parameterized Constructor Usage:
+Create a BankAccount object named account2 with an initial balance of $1000. Print out the
+balance of account2.
+c) Copy Constructor Usage:
+Using the account2 you created earlier, create a new BankAccount object named account3 using
+the copy constructor. Deduct $200 from account3 and print out its balance. Also, print out the
+balance of account2 to ensure it hasn't been affected by the transaction involving account3.
+Note: assume the variables in your case and print out the details
+
+4. Create a header file called matrix_multuply.h that takes two arrays as input and multiplies
+them and outputs an multiplied array. Note: Use pointers and 2D arrays to accomplish this
+
+5. Write a program that creates a 2D array of 5x5 values of type Boolean. Suppose indices
+represent people and the value at row i, column j of a 2D array is true just in case i and j are
+friends and false otherwise. Use initializer list to instantiate and initialize your array to
+represent the following configuration: (* means “friends”)
+i/j 0 1 2 3 4
+0     *   * *
+1   *   *   *
+2     *
+3   *       *
+4   * *   *
+Write a method to check whether two people have a common friend. For example, in the
+example above, 0 and 4 are both friends with 3 (so they have a common friend), whereas 1 and
+2 have no common friends.

@@ -1,0 +1,29 @@
+Q1: Given an array of {1,2,3,4,5} implement a binary tree according.
+
+
+Q2: Using the same tree that you made insert the values 6,7,8 accordingly. Now check if the
+tree made is a complete binary tree or if it’s a full binary tree if not delete the nodes
+accordingly to make it a complete and full binary tree. (I know the tree will be complete but
+implement a logic to check if it is complete).
+
+
+
+Q3: Search for the value defined by the user in the tree. If the value does not exist insert it
+then identify its location based on the level of the tree and if it’s the root at level, left child or
+right child.
+
+
+Q4: Given a Tree of nodes (Down below)
+
+You are tasked to take a value X from the user and ask whether to ceil or floor
+the value. If ceil is selected find the closest value to X in our case 7 at level three right child
+because if we ceil 6 we get 7 (Yes I am familiar with the logic of how ceil and floor works
+with floating points but this scenario is different so in the case of ceil add 1 to X and in the
+case of floor subtract 1 from x then find the value). Also find multiple occurrences if it as
+well.
+
+
+
+Q5: Given two BST’s (Down Below) You are tasked to merge them together to form a new
+BST the output of this will be 1 2 2 3 3 4 5 6 6 7 (You can visualize this by drawing the array
+to a tree in your notebook)
