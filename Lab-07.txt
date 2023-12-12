@@ -1,0 +1,441 @@
+1- cmp 4 integers
+2- fisrt non-zero using cmp and jmp
+3- if ( var < ecx ) AND (ecx >= edx) then
+     x = 0
+     else
+     x = 1
+4- while ( var <= 10)
+   {
+        if (var < 5)
+        Print “Hello”
+        else
+        Print “World”
+     var = var + 1
+   }
+
+5- sequential search
+6- bubble sort
+7- weekbased numbers
+8- char or alphabet checker
+
+
+=======================================================================
+
+TITLE 22k-4489 (Task-01.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+pmp byte "Enter integers one by one: ",0
+prompt byte "They are equal",0
+prompt1 byte "They are not equal",0
+
+var dword 4 dup(?)
+
+.code
+main proc
+    mov esi, 0
+    mov ecx, 4
+
+l1:
+    mov edx, offset pmp
+    call writestring
+    call readint
+    mov [var+esi*4], eax
+    call crlf
+    inc esi
+    loop l1
+
+; Loop for checking if they are equal
+mov esi, 1
+mov ecx, 3
+mov eax, [var]
+
+l2:
+    cmp eax, [var+esi*4]
+    jne not_equal
+    inc esi
+loop l2
+
+equal:
+mov edx, offset prompt
+call writestring
+exit
+
+not_equal:
+mov edx, offset prompt1
+call writestring
+call crlf
+exit
+
+main endp
+END main
+
+
+=======================================================================================================
+
+TITLE 22k-4489 (Task-02.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+prompt byte "First non zero element is : ",0
+prompt1 byte "There in no non-zero elemnts in array!",0
+
+Array dword 0, 0, 0, 150, 120, 35, -12, 66, 4, 0
+.code
+main proc
+    mov esi, 0
+    mov ecx, lengthof Array
+
+    l1:
+    cmp [Array+esi*4],0
+    ja nonzero
+    inc esi
+    dec ecx
+    cmp ecx,0
+    je endloop
+    jmp l1
+
+nonzero:
+mov edx, offset prompt
+call writestring
+movzx eax, sword ptr [Array+esi*4]
+call writedec
+exit
+
+endloop:
+mov edx, offset prompt1
+call writestring
+exit
+
+
+main endp
+END main
+
+===========================================================================================================
+
+TITLE 22k-4489 (Task-03.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+prompt byte "Condition is true and the value offset ebx is: ",0
+prompt1 byte "There in no non-zero elemnts in array!",0
+
+Array dword 0, 0, 0, 150, 120, 35, -12, 66, 4, 0
+var dword 5
+.code
+main proc
+    mov esi, 0
+    mov ecx, 7
+    mov eax, var+1
+
+    cmp var,ecx
+    jl checkif        ;if(var<ecx)             
+                                               
+    mov ebx,1         ;else                    
+    exit              ;mov x=1
+
+    checkif:         ;if (var<ecx && ecx>=eax)
+    cmp ecx,eax
+    jae checkAnd
+    exit
+
+    checkAnd:        ; mov x=0
+    mov edx, offset prompt
+    call writestring
+    mov ebx,0
+    mov eax, ebx
+    call writedec
+    
+
+    call dumpregs
+exit
+main endp
+END main
+
+===========================================================================================
+
+TITLE 22k-4489 (Task-04.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+hello byte "Hello",0
+world byte "World",0
+
+.code
+main proc
+    mov ecx, 0
+
+    while1:
+    inc ecx
+    cmp ecx,10
+    jle here
+    else1:
+    cmp ecx, 10
+    je endwhile
+    mov edx, offset world
+    call crlf
+    call writestring
+    jmp while1
+
+    
+
+    here:
+    cmp ecx, 5
+    ja else1
+    mov edx, offset hello
+    call writestring
+    call crlf
+    jmp while1
+
+    endwhile:
+    exit
+
+
+
+exit
+main endp
+END main
+
+======================================================================================================
+
+TITLE 22k-4489 (Task-05.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+array word 10, 4, 7, 14, 299, 156, 3, 19, 29, 300, 20
+user byte "Enter element you want to search: ",0
+pmp byte "Element Found at index: ",0
+pmp1 byte "Element not Found ! ",0
+
+.code
+main proc
+    mov ecx, lengthof array
+    mov esi, 0
+    mov edx, offset user
+    call writestring
+    call readint
+    
+    l1:
+       movzx ebx, [array+esi*2]
+       cmp eax, ebx
+       je found
+       inc esi
+    loop l1
+
+    notfound:
+    mov edx, offset pmp1
+    call writestring
+    exit
+
+    found:
+    mov edx, offset pmp
+    call writestring
+    mov eax, esi
+    call writedec
+    call crlf
+    exit
+
+
+
+exit
+main endp
+END main
+
+
+=================================================================================================
+
+TITLE 22k-4489 (Task-06.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+array word 10, 4, 7, 14, 299, 156, 3, 19, 29, 300, 20
+user byte "Sorted array: ",0
+pmp byte " ",0
+
+.code
+main proc
+     mov ecx, lengthof array
+     outer:
+           mov esi,0
+           cmp ecx,0
+           je print
+           dec ecx
+           inner:
+                 mov ax,[array+esi*2]
+                 mov bx,[array+((esi*2)+2)]
+                 cmp ax, bx
+                 ja swap
+                 here:
+                 inc esi
+                 cmp esi, lengthof array-1
+                 je outer
+           jmp inner
+
+    swap:
+    mov [array+esi*2],bx
+    mov [array+((esi*2)+2)],ax
+    jmp here
+
+    print:
+    mov edx, offset user
+    call writestring
+     mov ecx, lengthof array
+     mov esi,0
+    l1:
+    movzx eax, [array+esi*2]
+    call writedec
+    inc esi
+    mov edx ,offset pmp
+    call writestring
+    loop l1
+    exit
+
+
+
+
+exit
+main endp
+END main
+
+========================================================================================================
+
+
+TITLE 22k-4489 (Task-07.asm)
+INCLUDE Irvine32.inc
+
+.data
+mon byte "Monday",0
+tue byte "Tuesday",0
+wed byte "Wednesday",0
+thurs byte "Thursday",0
+frid byte "Friday",0
+sat byte "Saturday",0
+sun byte "Sunday",0
+
+pmp byte "Enter (0-6): ",0
+
+
+.code
+main PROC
+mov edx, offset pmp
+call writestring
+call readint
+
+cmp eax,0
+je sun1
+
+cmp eax,1
+je mon1
+
+cmp eax,2
+je tues1
+
+cmp eax,3
+je wed1
+
+cmp eax,4
+je thurs1
+
+cmp eax,5
+je frid1
+
+cmp eax,6
+je sat1
+
+mon1:
+mov edx, offset mon
+call writestring
+exit
+
+tues1:
+mov edx, offset tue
+call writestring
+exit
+
+wed1:
+mov edx, offset wed
+call writestring
+exit
+
+thurs1:
+mov edx, offset thurs
+call writestring
+exit
+
+frid1:
+mov edx, offset frid
+call writestring
+exit
+
+sat1:
+mov edx, offset sat
+call writestring
+exit
+
+sun1:
+mov edx, offset sun
+call writestring
+exit
+
+
+
+main ENDP
+
+END main
+
+=====================================================================================================
+
+
+TITLE 22k-4489 (Task-08.asm)
+INCLUDE Irvine32.inc
+
+.data
+pmp byte "Enter char: ",0
+upper byte "Enterd Character is upperedCase!",0
+lower byte "Enterd Character is loweredCase!",0
+number byte "Enterd Character is Number",0
+
+
+.code
+main PROC
+mov edx, offset pmp
+call writestring
+call readchar
+
+cmp al,65
+jae uppercase
+jmp go
+
+cmp al,97
+jae lowercase
+jmp go
+
+uppercase:
+cmp al, 97
+ja lowercase
+mov edx, offset upper
+call writestring
+exit
+
+lowercase:
+mov edx, offset lower
+call writestring
+exit
+
+go:
+mov edx, offset number
+call writestring
+exit
+
+main ENDP
+
+END main
+
+
+=========================================================================================

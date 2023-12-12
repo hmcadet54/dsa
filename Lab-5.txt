@@ -1,0 +1,415 @@
+1-fab
+2-A-B-C-D- patterens
+3-emp salary sum
+4-source to target movemnet
+5-?
+6- bubble sort
+
+
+
+TITLE 22k-4489(task-1.asm)
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main PROC
+mov ebx,1       ; t2
+mov edx,0       ; next
+mov ecx, 10     ; loop
+mov eax, 0      ; t1
+
+l1:
+call writedec   ; print t1
+call crlf       ; skip line
+add eax, ebx    ; t1+t2
+mov edx,eax     ; next=t1+t2
+mov eax,ebx     ; t1=t2
+mov ebx,edx     ; t2=next
+loop l1
+
+call Dumpregs
+exit
+main ENDP 
+END main
+
+======================================================================
+TITLE 22k-4489(task-2-A.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov ecx, 4
+mov ebx, 1
+outer:
+      mov edx,ecx
+      mov ecx, ebx
+      inner:
+            mov eax, 1
+            call writedec
+      loop inner
+      call crlf
+      inc ebx
+      mov ecx, edx
+loop outer
+endd:
+
+
+
+    exit
+main ENDP
+
+END main
+
+
+======================================================================
+
+TITLE 22k-4489(task-2-B.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov eax, 1
+mov ecx, 4
+outer:
+      mov edx,ecx
+      mov ebx,1
+      inner:
+            mov eax,1
+            call writedec
+            inc ebx
+      loop inner
+      call crlf
+      mov ecx, edx
+loop outer
+
+
+
+    exit
+main ENDP
+
+END main
+==========================================================================
+
+TITLE 22k-4489(task-2-C.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov eax, 1
+mov ecx, 4
+outer:
+      mov edx,ecx
+      mov eax,5
+      inner:
+            dec eax
+            call writedec
+      loop inner
+      call crlf
+      mov ecx, edx
+loop outer
+
+    exit
+main ENDP
+
+END main
+
+
+===========================================================================
+
+TITLE 22k-4489(task-2-D.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov eax, 1
+mov ecx, 4
+outer:
+      mov edx,ecx
+      mov eax,0
+      inner:
+            inc eax
+            call writedec
+      loop inner
+      call crlf
+      mov ecx, edx
+loop outer
+
+    exit
+main ENDP
+
+END main
+
+==================================================================================
+
+
+TITLE 22k-4489(task-3.asm)
+include irvine32.inc
+
+.data
+    empID dword 5 dup(?)
+    empName dword 5 dup(?)
+    empBirth dword 5 dup(?)
+    empSalary dword 5 dup(?)
+    TotalSalary dword ?
+
+
+    nameInput byte 50 DUP (?) ; Define a buffer to store the input name
+
+
+    id byte "Enter ID: " ,0
+    nname byte "Enter Name : " ,0
+    birth byte "Enter Birth Year : " ,0
+    salary byte "Enter AnnualSalary: " ,0
+    Total byte "Total Annual Salary off All Empyes is: ",0
+
+ 
+
+.code
+main PROC  
+    mov TotalSalary, 0
+    mov ecx,5
+    mov esi, 0
+    mov ebx, 0
+    
+    l1:
+    ;Prompt for ID
+    mov edx, offset id
+    call writestring
+    call readint
+    mov [empID+esi], eax
+    mov eax, 0
+    
+
+
+    ;Prompt for Name
+    mov edx, offset nname
+    call writestring
+    mov edx, offset nameinput
+    mov eax, 50
+    call readstring
+    mov edx, offset nameinput
+    mov [empName+esi], edx
+    mov eax, 0
+    
+
+
+    ;Prompt for BirthYear
+    mov edx, offset birth
+    call writestring
+    call readint
+    mov [empBirth+esi], eax
+    mov eax, 0
+    
+
+    ;Prompt for Annual salary
+
+    mov edx, offset salary
+    call writestring
+    call readint
+    mov [empSalary+esi], eax
+    ;call writedec
+    mov eax, 0
+
+
+
+
+    ; adding all Salary to TotalSalary Variable
+    mov ebx,[empSalary+esi]
+    add TotalSalary, ebx
+    ;mov eax, TotalSalary
+    ;call writedec
+    mov eax,0
+    add esi, 4
+
+    dec ecx
+    cmp ecx, 0
+    je endd
+    
+    jmp l1
+    endd:
+
+
+
+    ;Print All Total Salary
+    call crlf
+    mov edx, offset Total
+    call writestring
+    mov eax, TotalSalary 
+    call writedec
+    call crlf
+
+   
+    exit
+main ENDP
+
+END main
+
+====================================================================================
+
+
+TITLE 22k-4489(task-4.asm)
+INCLUDE Irvine32.inc
+
+.data
+     
+
+     source byte "abdullah",0
+     target byte 50 dup(?)
+
+.code
+main PROC  
+         
+         mov esi, offset source
+         mov edi, offset target
+
+         copy:
+
+         mov al, [esi]
+         mov [edi], al
+
+         inc esi
+         inc edi
+
+         cmp al,0
+         je copyto
+         jmp copy
+
+         copyto:
+         mov edx, offset target
+         call writestring
+
+
+call Dumpregs
+exit
+main ENDP 
+END main
+
+=============================================================================
+
+
+TITLE 22k-4489(task-5.asm)
+INCLUDE Irvine32.inc
+
+.data
+     
+
+     array dword 1,2,3,4,5,6,7
+
+.code
+main PROC  
+         
+         mov ecx,7
+         mov eax, 0
+         mov esi,0
+         mov edi, 6
+         copy:
+         mov eax, [array + esi * 4] ; Load array[esi] into eax
+         mov ebx, [array + edi * 4] ; Load array[edi] into ebx
+         mov [array + esi * 4], ebx ; Store ebx (array[edi]) into array[esi]
+         mov [array + edi * 4], eax ; Store eax (array[esi]) into array[edi]
+
+         inc esi                     ; Move esi forward
+         dec edi                     ; Move edi backward
+         loop  copy
+         mov eax,0
+         mov esi, 0
+         mov ecx, 7
+
+         print:
+         mov eax, [array+esi*4]
+         call writedec
+         call crlf
+         inc esi
+         loop print
+
+call Dumpregs
+exit
+main ENDP 
+END main
+
+===================================================================================
+
+
+TITLE 22k-4489(task-6.asm)
+
+include irvine32.inc
+
+.data
+    myArray BYTE 8, 5, 1, 2, 6                        
+    var        byte ? ;used to swap
+    var1 dword 0    ; flag variable (to avoid error)
+    var2 sdword 1    ; flag variable (to avoid error)
+.code
+main PROC
+    
+    ; initialing registers
+    mov ebx,0
+    mov eax,0
+    mov esi,0
+
+    mov ecx,LENGTHOF myarray 
+        
+        
+    l:
+        mov eax,ecx ;j
+        mov ebx,ecx ;i
+        dec eax ; j = i  - 1
+        mov ecx , eax
+        ;dec eax
+        cmp var2 ,ecx ; to aoid infinte loop when ecx = 0
+        jg m 
+        
+        l2:
+            mov dl , myarray[ebx* TYPE myarray - 1] ; value at [i]
+            mov var,dl
+            mov dl,myarray[eax* TYPE myarray - 1 ] ; value at [i-1]
+            
+            
+            cmp dl,var
+            jg l1    ;jump to swap
+            jmp x    ; to avoid using swap algo
+            ; SWAP
+            l1:
+                ;dec ecx
+                mov myarray[ebx* TYPE myarray -1],dl
+                mov dl,var
+                mov myarray[eax* TYPE myarray - 1],dl
+            jmp x    ; useless
+            x:
+
+            dec eax ; j = j - 1
+        loop l2
+        ;cmp var1,ebx   TO avoid error but seem useless
+        ;jg m
+        mov ecx,ebx ; retrive i
+        
+    loop l
+    m:
+    
+
+mov esi,0
+mov ecx,5
+mov dh,1
+mov dl,0
+print:
+
+mov al,myarray[esi]
+call writeint
+call gotoxy
+inc esi
+inc dh
+mov dl,0
+LOOP print
+    
+exit
+main ENDP
+END main

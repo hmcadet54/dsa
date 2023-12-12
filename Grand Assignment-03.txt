@@ -1,0 +1,832 @@
+1- Matching count in 2 arrays
+2-10 bit addition
+3-searching recursively
+4-Thre consuc numbers in array
+5-str trim
+6-dividing until get 05
+10- gcd
+11-structure and average
+12-plag check,,,  is is is 
+
+
+==========================================================================
+INCLUDE Irvine32.inc
+
+.data
+    array1 DWORD 1, 2, 3, 4, 5
+    array2 DWORD 1, 2, 6, 4, 5
+    length_of_array DWORD 5
+    pmp byte "The Mathcing count is: ",0
+
+.code
+CountMatches PROC USES esi edi ecx,
+    Parray1:PTR DWORD,
+    Parray2:PTR DWORD,
+    length_of_arr:PTR DWORD
+
+    push ebp
+    mov ebp, esp
+    push esi
+    push edi
+
+    mov esi, Parray1      ; pointer to array1
+    mov edi, Parray2    ; pointer to array2
+    mov ecx, 5
+
+    xor eax, eax            ; initialize count to 0
+
+    L1:
+        mov edx, [esi]      ; get element from array1
+        cmp edx, [edi]      ; compare with corresponding element in array2
+        je L2               ; if equal, jump to L2
+        jmp to_another              ; if not equal, jump to L3
+
+    L2:
+        inc eax 
+        to_another:
+        add esi, 4          
+        add edi, 4
+        
+        cmp ecx,0
+        je l3
+        loop L1
+
+    L3:
+        pop edi
+        pop esi
+        pop ebp
+
+        ret
+
+CountMatches ENDP
+
+
+main PROC
+    mov esi, OFFSET array1
+    mov edi, OFFSET array2
+    mov ecx, length_of_array
+
+    invoke CountMatches, esi, edi, ecx
+     mov edx, offset pmp
+    call writestring
+    call writedec
+
+
+    call DumpRegs
+    exit
+main ENDP
+
+END main
+
+
+===================================================================================================
+
+
+INCLUDE Irvine32.inc
+
+.DATA
+    binaryInt1 BYTE 10101010b, 11110011b, 11011101b, 01010101b, 11111111b, 11110000b, 11001100b, 11111111b, 10101010b, 11111111b
+binaryInt2 BYTE 00110011b, 11111111b, 11111111b, 10101010b, 11111111b, 01010101b, 11111111b, 11111111b, 11111111b, 11111111b
+
+
+.CODE
+Extended_Sub PROC
+
+    mov ebx, 0
+    mov edx, 0
+    mov ecx, lengthof binaryInt1
+
+    subLoop:
+        movzx eax, byte ptr [edi]  
+        sub al, byte ptr [esi]      
+        mov byte ptr [edi], al      
+
+        test al, al
+        jz endLoop
+
+        add edi, 1       
+        add esi, 1       
+        loop subLoop     
+
+    endLoop:
+    ret
+Extended_Sub ENDP
+
+main PROC
+    
+    lea edi, binaryInt1  ;
+    mov ecx, 10 
+    call DumpMem
+
+    lea esi, binaryInt2  
+    mov ecx, 10 
+    call DumpMem
+
+    call Extended_Sub
+
+
+    lea edi, binaryInt1  
+    mov ecx, 10 
+    call DumpMem
+
+
+    mov eax, 0
+    call DumpRegs
+    call WaitMsg
+    exit
+main ENDP
+end main
+
+
+
+
+==============================================================
+
+INCLUDE irvine32.inc
+
+.data
+array dword 10, 4, 7, 14, 299, 156, 3, 19, 29, 300, 20
+user byte "Enter element you want to search: ", 0
+pmp byte "Element Found at index: ", 0
+pmp1 byte "Element not Found ! ", 0
+
+.code
+search123 proc value:DWORD,index:DWORD
+     
+     cmp esi, lengthof array
+     je not_found
+     mov ebx, value
+     mov esi,index
+     cmp ebx, [array+esi*4]
+     jne go_to
+     mov edx, offset pmp
+     call writestring
+     mov eax, index
+     inc eax
+     call writedec
+     ret
+     go_to:
+     inc esi
+     mov index, esi
+     invoke search123, value, index
+     ret
+     not_found:
+     mov edx, offset pmp1
+     call writestring
+     ret
+search123 endp
+
+main proc
+    mov edx , offset user
+    call writestring
+    call readint
+    invoke search123, eax,0
+    exit
+main endp
+
+
+END main
+
+
+
+========================================================================
+INCLUDE irvine32.inc
+
+.data
+array1 dword 1,2,3,4,5,6,7
+array2 dword 1,2,3,3,3,6,7
+array3 dword 1,2,3,3,6,8,7
+count=0
+pmp byte "array conatin 3 consecutive numbers!",0
+pmp1 byte "array doesn't 3 consecutive numbers!",0
+
+.code
+FindThrees proc USES esi ebx, array_new:PTR DWORD,length_array:DWORD
+      mov esi, array_new
+      ;mov eax, [esi]
+      ;call writedec
+      mov eax, 0
+      mov ecx, length_array
+      mov ebx, 0
+      mov edx, 0
+      l1:
+      mov eax,[esi+ebx*4]
+      inc ebx
+      push ecx
+      dec ecx
+      cmp ecx, 0
+      je to_end
+      mov edi, ebx
+          l2:
+          cmp eax,[esi+edi*4]
+          je Count_to
+          c_back:
+          inc edi
+          loop l2
+     cmp edx,2
+     je to_end
+     pop ecx
+     loop l1
+     jmp to_end
+     
+     Count_to:
+     inc edx
+     jmp c_back
+
+     to_end:
+     cmp edx,2
+     je consuc
+     mov eax, 1
+     jmp no
+     ret
+
+     consuc:
+     mov eax,edx
+     mov edx, offset pmp
+     call writestring
+     call crlf
+     ret
+
+     no:
+     mov edx, offset pmp1
+     call writestring
+     call crlf
+     ret
+FindThrees endp
+
+
+
+main proc
+    mov esi, offset array3
+    mov ebx, lengthof array1
+    invoke FindThrees, esi,ebx
+
+    mov esi, offset array2
+    mov ebx, lengthof array1
+    invoke FindThrees, esi,ebx
+
+
+    mov esi, offset array3
+    mov ebx, lengthof array1
+    invoke FindThrees, esi,ebx
+
+
+    exit
+main endp
+
+
+END main
+
+
+
+==========================================================================
+INCLUDE irvine32.inc
+
+.data
+
+para byte "###ABC",0
+count=5
+array byte count dup(?)
+
+.code
+str_trim_mine proc word_mine:PTR BYTE, remove:BYTE 
+    mov esi, word_mine
+    invoke str_length, esi
+    mov ecx, eax
+    mov edi,0
+    l1:
+    mov al, [esi]
+    cmp al,  remove
+    jne push_back
+    back_loop:
+    inc esi
+    loop l1
+    jmp to_end
+    push_back:
+    inc edi
+    mov ebx, [esi]
+    push ebx
+    jmp back_loop
+    to_end:
+    mov ecx, edi
+    dec edi
+    l2:
+    pop ebx
+    mov [array+edi],bl
+    dec edi
+    loop l2
+    mov edx, offset array
+    call writestring
+    ret
+str_trim_mine endp
+
+main proc
+    mov esi, offset para
+    invoke str_trim_mine,ADDR para, '#'
+    exit
+main endp
+
+END main
+
+==========================================================
+Include Irvine32.inc
+
+.data
+    dividendPrompt BYTE "Enter dividend: ", 0
+    divisorPrompt BYTE "Enter divisor: ", 0
+    dividend DWORD ?
+    divisor DWORD ?
+
+.code
+main PROC
+    mov edx, OFFSET dividendPrompt
+    call writeString
+    call readHex
+    mov dividend, eax
+
+    mov edx, OFFSET divisorPrompt
+    call writeString
+    call readHex
+    mov divisor, eax
+
+    mov eax, dividend
+l1:
+    mov edx, 0
+    idiv divisor
+    cmp eax, 5h
+    jle break
+    jmp l1
+
+break:
+    call writeHex
+    exit
+main ENDP
+END main
+
+
+=======================================================
+A=5xA-7
+mov ax, 5 
+imul A  	
+sub ax, 7  	
+mov A, ax 
+
+B=(A-B) x (B+10)
+
+mov ax, A  	
+sub ax, B  	
+add B, 10 
+imul B  
+mov B, ax 
+
+
+mov ax, 9 
+imul A  	
+mov bx, 6  	
+sub bx, ax  	
+mov A, bx 
+
+
+mov ax, A 
+ imul A  
+mov bx, B  	
+imul bx, B  	
+add ax,bx  	
+mov cx, C1  	
+imul cx, C1  	
+cmp cx, ax  	
+jne false1  	
+stc  
+jmp endif1 
+false1:  	
+clc 
+endif1: 	 
+
+============================================
+
+INCLUDE Irvine32.inc
+
+.DATA
+    prompt1 BYTE "Enter the first number: ", 0
+    prompt2 BYTE "Enter the second number: ", 0
+    prompt3 BYTE "The GCD is: ", 0
+    buffer BYTE 11 DUP(?) ; Assuming a DWORD can be at most 10 digits long
+
+    input1 DWORD ?
+    input2 DWORD ?
+    result DWORD ?
+
+.CODE
+main PROC
+    call TakeInput
+    call GCD
+    call Display
+    exit
+main ENDP
+
+TakeInput PROC
+   mov edx, offset prompt1
+   call writestring
+   call readint
+   mov input1, eax
+
+   mov edx, offset prompt2
+   call writestring
+   call readint
+   mov input2, eax
+
+    ret
+TakeInput ENDP
+GCD PROC
+l1:
+    mov eax, input1
+    mov ebx, input2
+    cdq
+    idiv ebx
+
+    cmp edx, 0
+    je yes_found
+
+    mov input1, ebx
+    mov input2, edx
+    jmp l1
+yes_found:
+    mov eax, input2
+    mov result, eax
+    ret
+GCD ENDP
+
+Display PROC
+
+    mov edx, OFFSET prompt3
+    call WriteString
+
+
+    mov eax, result
+    call WriteInt
+    ret
+Display ENDP
+
+END main
+
+==========================================
+INCLUDE Irvine32.inc
+INCLUDE macros.inc
+
+
+.DATA
+    test1 dword 67, 70, 82, 80, 78
+    test2 dword 45, 56, 72, 67, 76
+    test3 dword 98, 87, 89, 95, 92
+    test4 dword 33, 44, 40, 50, 60
+    test_total dword 5 dup(0)
+
+
+.CODE
+main PROC
+    
+    mov ecx, 5
+    mov esi, 0
+    mov edi, 5
+    mov eax, 0
+    mov edx, 0
+    l1:
+    mov eax, [test1+esi*4]
+    add [test_total+0], eax
+
+    mov eax, [test2+esi*4]
+    add [test_total+4], eax
+
+    mov eax, [test3+esi*4]
+    add [test_total+8], eax
+
+    mov eax, [test4+esi*4]
+    add[test_total+12], eax
+    inc esi
+    loop l1
+
+    mov ecx, 4
+    mov esi, 0
+    l2:
+    mov edx, 0
+    mov eax, [test_total+esi*4]
+    div edi
+    inc esi
+    call writedec
+    call crlf
+    loop l2
+
+    exit
+main ENDP
+
+END main
+
+========================================
+
+INCLUDE Irvine32.inc
+
+student STRUCT
+    test1 DWORD ?
+    test2 DWORD ?
+    test3 DWORD ?
+    test4 DWORD ?
+student ENDS
+
+.DATA
+    stud student 5 dup({})
+    marry student <>
+    scott student <>
+    george student <>
+    beth student <>
+    sem student <>
+    average DWORD 5
+
+.CODE
+main PROC
+    mov stud[0].test1, 67
+    mov stud[0].test2, 45
+    mov stud[0].test3, 98
+    mov stud[0].test4, 33
+
+    mov stud[1].test1, 70
+    mov stud[1].test2, 70
+    mov stud[1].test3, 70
+    mov stud[1].test4, 70
+
+    mov stud[2].test1, 70
+    mov stud[2].test2, 70
+    mov stud[2].test3, 70
+    mov stud[2].test4, 70
+
+    mov stud[3].test1, 82
+    mov stud[3].test2, 72
+    mov stud[3].test3, 89
+    mov stud[3].test4, 40
+
+    mov stud[4].test1, 78
+    mov stud[4].test2, 76
+    mov stud[4].test3, 92
+    mov stud[4].test4, 60
+
+    mov ecx, 5
+    mov esi, 0
+l1:
+    mov eax, stud[esi].test1
+    add eax, stud[esi].test2
+    add eax, stud[esi].test3
+    add eax, stud[esi].test4
+    div average
+    mov eax, edx
+    call writedec
+    inc esi
+    loop l1
+
+exit
+main ENDP
+
+END main
+
+
+==================================
+
+
+
+
+INCLUDE Irvine32.inc
+
+.data
+    count=50
+    count2 dword 0
+    testDocument1 BYTE "This is is is a sample document",0
+    testDocument2 BYTE "This is a is a sample document",0
+    testDocument3 BYTE "This is not is a sample document",0
+    var1 byte count dup(0)
+    var2 byte count dup(0)
+    var3 byte count dup(0)
+    var4 byte count dup(0)
+    var5 byte count dup(0)
+    var6 byte count dup(0)
+    var7 byte count dup(0)
+    var8 byte count dup(0)
+    space byte " ",0 
+    word_array dword count dup(?)
+    pmp byte "Plag found",0
+    pmp1 byte "Plag not found",0
+.code
+seperating proc line1:PTR BYTE
+
+    mov esi, line1
+    invoke str_length ,esi
+    mov ecx, eax
+    mov ebx, 0
+
+l1:
+    mov al, [esi]
+    cmp al, space
+    je next1
+    mov [var1+ebx], al
+    inc esi
+    inc ebx
+    loop l1
+
+next1:
+    ; Tokenize the second part of the line
+    add esi, 1 ; Move past the space
+    mov ebx, 0
+
+l2:
+    mov al, [esi]
+    cmp al, space
+    je next2
+    mov [var2+ebx], al
+    inc esi
+    inc ebx
+    loop l2
+
+next2:
+    ; Tokenize the third part of the line
+    add esi, 1 ; Move past the space
+
+    mov ebx, 0
+
+l3:
+    mov al, [esi]
+    cmp al, space
+    je next3
+    mov [var3+ebx], al
+    inc esi
+    inc ebx
+    loop l3
+
+next3:
+    ; Tokenize the fourth part of the line
+    add esi, 1 ; Move past the space
+
+    mov ebx, 0
+
+l4:
+    mov al, [esi]
+    cmp al, space
+    je next4
+    mov [var4+ebx], al
+    inc esi
+    inc ebx
+    loop l4
+
+next4: 
+    add esi, 1 ; Move past the space
+    mov ebx, 0
+
+l5:
+    mov al, [esi]
+    cmp al, space
+    je next5
+    mov [var5+ebx], al
+    inc esi
+    inc ebx
+    loop l5
+
+next5: 
+    add esi, 1 ; Move past the space
+    mov ebx, 0
+
+l6: 
+    mov al, [esi]
+    cmp al, space
+    je next6
+    mov [var6+ebx], al
+    inc esi
+    inc ebx
+    loop l6
+
+next6:
+    add esi, 1 ; Move past the space
+    mov ebx, 0
+
+l7:
+    mov al, [esi]
+    cmp al, space
+    je next7
+    mov [var7+ebx], al
+    inc esi
+    inc ebx
+    loop l7
+
+next7:
+ret
+seperating endp
+
+check_plag1 proc word1:PTR BYTE, word2:PTR BYTE
+      mov eax, 0
+      mov esi, word1
+      mov edi, word2
+      cmpsd
+      jne to_end
+      inc eax
+      to_end:
+      ret
+check_plag1 endp
+
+check_plag PROC word1:PTR BYTE, word2:PTR BYTE, word3:PTR BYTE, word4:PTR BYTE, word5:PTR BYTE, word6:PTR BYTE, word7:PTR BYTE
+      mov eax, word1
+      mov [word_array+0], eax
+      mov eax, word2
+      mov [word_array+4], eax
+      mov eax, word3
+      mov [word_array+8], eax
+      mov eax, word4
+      mov [word_array+12], eax
+      mov eax, word5
+      mov [word_array+16], eax
+      mov eax, word6
+      mov [word_array+20], eax
+      mov eax, word7
+      mov [word_array+24], eax
+      mov ecx, 7
+      mov ebx, 0
+      mov eax, 0
+      l1:
+      mov esi,[word_array+ebx*4]
+      inc ebx
+      cmp ebx, 7
+      je out_to
+      mov edi,[word_array+ebx*4]
+      cmpsd
+      jne last
+      inc eax
+      last:
+      loop l1
+      ret
+      out_to:
+      ret
+check_plag endp
+
+main PROC
+    ; Process testDocument1
+    invoke seperating, ADDR testDocument1
+    invoke check_plag, ADDR var1, ADDR var2, ADDR var3, ADDR var4, ADDR var5, ADDR var6, ADDR var7
+    cmp eax, 2
+    je found
+
+    next1:
+    invoke seperating, ADDR testDocument2
+    invoke check_plag, ADDR var1, ADDR var2, ADDR var3, ADDR var4, ADDR var5, ADDR var6, ADDR var7
+    cmp eax, 2
+    je found2
+    mov edx, offset pmp1
+    call writestring
+    call crlf
+
+    next2:
+    invoke seperating, ADDR testDocument2
+    invoke check_plag, ADDR var1, ADDR var2, ADDR var3, ADDR var4, ADDR var5, ADDR var6, ADDR var7
+    cmp eax, 2
+    je found3
+    mov edx, offset pmp1
+    call writestring
+    call crlf
+    jmp last
+
+    found:
+    mov edx, offset pmp
+    call writestring
+    call crlf
+    jmp next1
+
+    found2:
+    mov edx, offset pmp
+    call writestring
+    call crlf
+    jmp next2
+
+    found3:
+    mov edx, offset pmp
+    call writestring
+    call crlf
+    last:
+    ret
+main ENDP
+
+
+END main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

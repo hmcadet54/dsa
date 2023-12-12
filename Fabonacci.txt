@@ -1,0 +1,25 @@
+TITLE 22k-4489(task-1.asm)
+INCLUDE Irvine32.inc
+
+.data
+
+.code
+main PROC
+mov ebx,1       ; t2
+mov edx,0       ; next
+mov ecx, 10     ; loop
+mov eax, 0      ; t1
+
+l1:
+call writedec   ; print t1
+call crlf       ; skip line
+add eax, ebx    ; t1+t2
+mov edx,eax     ; next=t1+t2
+mov eax,ebx     ; t1=t2
+mov ebx,edx     ; t2=next
+loop l1
+
+call Dumpregs
+exit
+main ENDP 
+END main

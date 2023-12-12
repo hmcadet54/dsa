@@ -1,0 +1,472 @@
+1-product of thre using stack proc
+2-GCD
+3-min and max array
+4-squre of number using enter&leave instructions
+5-factorial using recursion
+
+7-Is prime in the array, and min max prime 
+8- bubble sort
+
+
+task-01
+
+
+INCLUDE irvine32.inc
+.data
+
+day byte ?
+month byte ?
+year word ?
+
+
+.code
+main proc
+
+mov eax, 5
+mov ebx, 5
+mov ecx, 5
+
+shl eax, 4
+shl ebx, 2
+shl ecx, 0
+
+add eax, ebx
+add eax, ecx
+
+
+
+call dumpregs
+exit
+main ENDP
+END main
+
+=====================================================================================
+task 02
+
+INCLUDE Irvine32.inc
+
+.DATA
+    prompt1 BYTE "Enter the first number: ", 0
+    prompt2 BYTE "Enter the second number: ", 0
+    prompt3 BYTE "The GCD is: ", 0
+    buffer BYTE 11 DUP(?) ; Assuming a DWORD can be at most 10 digits long
+
+    input1 DWORD ?
+    input2 DWORD ?
+    result DWORD ?
+
+.CODE
+main PROC
+    call TakeInput
+    call GCD
+    call Display
+    exit
+main ENDP
+
+TakeInput PROC
+    ; Prompt user for input
+    mov edx, OFFSET prompt1
+    call WriteString
+
+    ; Read first number
+    mov edx, OFFSET input1
+    call ReadInt
+    mov input1, eax ; Store the input value
+
+    ; Prompt user for input
+    mov edx, OFFSET prompt2
+    call WriteString
+
+    ; Read second number
+    mov edx, OFFSET input2
+    call ReadInt
+    mov input2, eax ; Store the input value
+
+    ret
+TakeInput ENDP
+
+GCD PROC
+    ; Save registers
+    push eax
+    push ebx
+    push ecx
+    push edx
+
+    ; Calculate GCD using Euclidean algorithm
+    mov eax, input1
+    mov ebx, input2
+    cmp eax, ebx
+    jge L1
+    xchg eax, ebx
+L1:
+    xor edx, edx
+L2:
+    mov ecx, eax
+    xor eax, ebx
+    xor ebx, ecx
+    cmp eax, 0
+    jne L2
+
+    ; Save result
+    mov result, ebx
+
+    ; Restore registers
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax
+
+    ret
+GCD ENDP
+
+Display PROC
+    ; Display result
+    mov edx, OFFSET prompt3
+    call WriteString
+
+    ; Convert result to string
+    mov eax, result
+    mov edx, OFFSET buffer
+    call WriteInt
+
+    mov edx, OFFSET buffer
+    call WriteString
+
+    ret
+Display ENDP
+
+END main
+
+
+===================================================================================
+
+task 03
+
+INCLUDE Irvine32.inc
+
+.DATA
+    prompt1 BYTE "Min Value elemnet in array is: ", 0
+    prompt2 BYTE "Max Value elemnet in array is: ", 0
+    array dword 12,34,5,6,22,89,45,67,21,1,66,90,68,33,9 
+    small dword ?
+    large dword ?
+
+
+.CODE
+main PROC
+    call TakeInput
+    call display
+    exit
+main ENDP
+
+TakeInput PROC
+mov ecx, lengthof array
+mov eax, [array+0]
+mov small, eax
+mov large, eax
+mov ebx, 1
+
+l1:
+mov eax, [array+ebx*4]
+cmp eax, small
+jl smallest
+cmp eax, large
+ja largest
+inc ebx
+loop l1
+
+cmp ecx, 0
+jmp here3
+
+smallest:
+mov small, eax
+jmp l1
+
+largest:
+mov large, eax
+jmp l1
+
+
+here3:
+ret
+TakeInput ENDP
+
+display proc
+
+mov eax, small
+mov edx, offset prompt1
+call writestring
+call writedec
+
+call crlf
+
+mov eax, large
+mov edx, offset prompt2
+call writestring
+call writedec
+
+display endp
+
+
+END main
+
+============================================================================
+
+task 05
+
+INCLUDE Irvine32.inc
+
+.DATA
+    prompt BYTE "Enter a number: ", 0
+    resultMessage BYTE "Factorial of the number: ", 0
+
+.CODE
+LocalSquare PROC
+    ENTER 0, 0 
+    mov edx, offset prompt
+    call writestring
+    call readint
+    mov ecx, eax
+    dec ecx
+
+    l1:
+    mul ecx
+    cmp ecx,0
+    je x
+    loop l1
+    
+    x:
+    LEAVE
+    ret
+LocalSquare ENDP
+
+main PROC
+    call LocalSquare
+    mov edx, offset resultMessage
+    call writestring
+    call writedec
+    exit
+main ENDP
+
+END main
+
+
+==================================================================================
+
+
+task 4
+
+INCLUDE Irvine32.inc
+
+.DATA
+    prompt BYTE "Enter a number: ", 0
+    resultMessage BYTE "Factorial: ", 0
+
+.CODE
+Factorial PROC
+    push ebp
+    mov ebp, esp
+    mov eax, [ebp + 8] ; get n
+
+    cmp eax, 0
+    ja L1
+
+    mov eax, 1
+    jmp ReturnFact
+L1:
+    dec eax
+    push eax
+    call Factorial
+
+    mov ebx, [ebp + 8] 
+    imul eax, ebx 
+
+ReturnFact:
+    pop ebp 
+    ret 4 
+Factorial ENDP
+
+main PROC
+    mov edx, OFFSET prompt
+    call WriteString
+
+    call ReadInt
+    push eax 
+
+    call Factorial 
+    push eax
+
+    pop eax
+    mov edx, OFFSET resultMessage
+    call WriteString
+    call WriteInt
+    call Crlf
+
+    call WaitMsg
+    exit
+main ENDP
+
+END main
+
+=======================================================================
+
+task 06
+
+INCLUDE Irvine32.inc
+
+.DATA
+    pmp BYTE "Enter a number: ", 0
+    pmp1 BYTE "Not Prime", 0
+    pmp2 BYTE "Yes Prime", 0
+    array DWORD 7, 3, 5, 13
+    count dword ?
+    small dword ?
+    large dword ?
+        prompt1 BYTE "Min Value elemnet in array is: ", 0
+    prompt2 BYTE "Max Value elemnet in array is: ", 0
+
+.CODE
+
+maxPrime proc
+mov ecx, lengthof array
+mov eax, [array+0]
+mov small, eax
+mov large, eax
+mov ebx, 1
+
+l1:
+mov eax, [array+ebx*4]
+cmp eax, small
+jl smallest
+cmp eax, large
+ja largest
+inc ebx
+loop l1
+
+cmp ecx, 0
+jmp here3
+
+smallest:
+mov small, eax
+jmp l1
+
+largest:
+mov large, eax
+jmp l1
+
+
+here3:
+
+maxPrime endp
+
+display proc
+call crlf
+mov eax, small
+mov edx, offset prompt1
+call writestring
+call writedec
+
+call crlf
+
+mov eax, large
+mov edx, offset prompt2
+call writestring
+call writedec
+
+call crlf
+
+display endp
+
+main PROC
+    mov ebx, 2
+    mov ecx, 4
+    mov esi, 0
+
+l1:
+    mov eax, [array + esi * 4]
+    mov edx, 0
+    div ebx
+    inc esi
+    dec ecx
+
+    cmp edx, 0
+    jne isPrime
+    cmp ecx, 0
+    je here
+jmp l1
+
+isPrime:
+    add count, 1
+    cmp ecx, 0
+    jne l1
+
+
+here:
+    mov eax, count
+    call writedec
+    cmp eax,4
+    je here2
+    exit
+
+    here2:
+    call maxPrime
+    call display
+    exit
+main ENDP
+
+END main
+
+==================================================================
+TITLE 22k-4489 (Task-07.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+array word 10, 4, 7, 14, 299, 156, 3, 19, 29, 300, 20
+user byte "Sorted array: ",0
+pmp byte " ",0
+
+.code
+main proc
+     mov ecx, lengthof array
+     outer:
+           mov esi,0
+           cmp ecx,0
+           je print
+           dec ecx
+           inner:
+                 mov ax,[array+esi*2]
+                 mov bx,[array+((esi*2)+2)]
+                 cmp ax, bx
+                 ja swap
+                 here:
+                 inc esi
+                 cmp esi, lengthof array-1
+                 je outer
+           jmp inner
+
+    swap:
+    mov [array+esi*2],bx
+    mov [array+((esi*2)+2)],ax
+    jmp here
+
+    print:
+    mov edx, offset user
+    call writestring
+     mov ecx, lengthof array
+     mov esi,0
+    l1:
+    movzx eax, [array+esi*2]
+    call writedec
+    inc esi
+    mov edx ,offset pmp
+    call writestring
+    loop l1
+    exit
+exit
+main endp
+END main
+
+
+
+

@@ -1,0 +1,1347 @@
+INCLUDE Irvine32.inc
+MAX_LINE_LENGTH = 80
+MAX_LINE1_LENGTH = 80
+.data
+
+H1 BYTE "			()()()()  ()()()  ()    ()   ()()   ()       ()()    ()()   ()()()() ()    () ()()()() ()()() ",0
+H2 BYTE "			()       ()       ()    () ()    () ()     ()    () ()   () ()       ()    ()    ()    ()   ()",0
+H3 BYTE "			()()()() ()       ()()()() ()    () ()     ()()()() ()()()  ()()()() ()()()()    ()    ()()() ",0
+H4 BYTE "			      () ()       ()    () ()    () ()     ()    () ()  ()        () ()    ()    ()    ()     ",0
+H5 BYTE "			()()()()  ()()()  ()    ()   ()()   ()()() ()    () ()   () ()()()() ()    () ()()()() ()     ",0
+
+
+H6 BYTE "			          ()()()     ()()     ()()    ()    () ()()()()        ()()   ()()()  ()()()  ",0
+H7 BYTE "			         ()         ()   () ()    () () ()  ()    ()         ()    () ()   () ()   () ",0
+H8 BYTE "			         ()  ()()() ()()()  ()()()() ()  () ()    ()         ()()()() ()()()  ()()()  ",0
+H9 BYTE "			         ()  ()  () ()  ()  ()    () ()   ()()    ()         ()    () ()      ()      ",0
+H10 BYTE "			          ()()   () ()   () ()    () ()    ()     ()         ()    () ()      ()      ",0
+MEM BYTE "    GROUP MEMBERS:",0
+MEM1 BYTE "Asghar Ali      (22k-4415)",0
+MEM2 BYTE "Abdullah Shafiq (22k-4489)",0
+MEM3 BYTE "Muhammad Bilal  (22k-4242)",0
+
+
+msg BYTE "PRESS ANY KEY TO CONTINUE.... ",0
+msg1 BYTE "ARE YOU?:",0
+msg2 BYTE "1) ADMIN",0
+msg3 BYTE "2) STUDENT",0
+msg4 BYTE "3) QUIT",0
+msg5 BYTE "ENTER YOUR CHOICE: ",0
+CHOICE byte ?
+
+
+    adminid byte "123asghar", 0
+    adminidprompt byte "Enter ID: ", 0
+    adminidentity1 byte 20 dup(?)
+    var byte 12
+
+    adminpassword byte "112233" , 0
+
+    adminpassprompt byte "Enter Password: ", 0
+
+    adminpassword1 byte 20 dup(?)
+    var1 byte 123
+
+    adminstr1 byte "Invalid admin credentials",0
+    adminapprove dword 0
+    invalidinput byte "Invalid Input. ", 0
+    again byte "Do you want to continue?(Y - YES and N - NO) ", 0
+    CHOICE1 byte ?
+
+    ;admin portal menu
+admin_msg1 BYTE " ADMIN MENU",0
+admin_msg2 BYTE "1) EDIT ADMIN CREDENTIALS",0
+admin_msg3 BYTE "2) VIEW STUDENTS LIST",0
+admin_msg4 BYTE "3) VIEW SCHOLARSHIP AWARDEES",0
+admin_msg5 BYTE "4) CALCULATE SHOLARSHIP",0
+admin_msg6 BYTE "5) VIEW BUDGET",0
+admin_msg7 BYTE "6) QUIT",0
+admin_msg8 BYTE "ENTER YOUR CHOICE: ",0
+admin_CHOICE byte ?
+
+newadmin byte "Enter new admin ID: ", 0
+
+newpass byte "Enter new Password: ", 0
+adminupdated byte "Admin Credentials Updated. ", 0
+
+;budget
+budget byte "The Total budget for scholarships is: RS.", 0
+budget_am dword 999999
+
+
+count = 20 ; Increase the size to accommodate the longest segment in your input string
+;line byte "1234 abdullah admin", 0
+space byte " ", 0
+line BYTE MAX_LINE_LENGTH DUP(?)
+line1 BYTE MAX_LINE_LENGTH DUP(?)
+var12 byte count dup(0)
+var2 byte count dup(0)
+var3 byte count dup(0)
+var4 byte count dup(0)
+var12_new byte count dup(0)
+var2_new byte count dup(0)
+var3_new byte count dup(0)
+var4_new byte count dup(0)
+    prompt1 BYTE "Min Value elemnet in array is: ", 0
+    prompt2 BYTE "Max Value elemnet in array is: ", 0
+    prompt3 BYTE "Enter Your ID: ", 0
+    prompt4 BYTE "Congrajulations you got 100% scholarship !!!!!!: ", 0
+    prompt5 BYTE "better Luck next time! ", 0
+    array dword 12,34,5,6,22,89,45,67,21,1,66,90,68,33,9 
+    small dword ?
+    large dword ?
+filename1    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file1.txt", 0
+filename2    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file2.txt", 0
+filename3    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file3.txt", 0
+filename4    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file4.txt", 0
+filename5    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file5.txt", 0
+filename6    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file6.txt", 0
+filename7    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file7.txt", 0
+filename8    BYTE "D:\Fast-3rd-Sem\COAL-Lab\file8.txt", 0
+score1 dword 0
+score2 dword 0
+score3 dword 0
+score4 dword 0
+score5 dword 0
+score6 dword 0
+score7 dword 0
+score8 dword 0
+score dword 0
+mainid dword 0
+idwin dword 0
+score_array dword 8 dup(0)
+fileHandle  HANDLE ?
+fileHandle1  HANDLE ?
+bytesRead   DWORD ?
+bytesRead1   DWORD ?
+result DWORD ?
+name_prmpt byte "Student ID: ",0
+name_prmpt1 byte "Student Name: ",0
+name_prmpt2 byte "Student father Income: ",0
+name_prmpt3 byte "Student Percentage: ",0
+name_prmpt4 byte "Student scholarship score: ",0
+line_break byte "=======================================",0
+
+
+.code
+ReadLine PROC
+    mov ecx, MAX_LINE_LENGTH
+    mov edx, OFFSET line 
+    call ReadFromFile
+    mov bytesRead, eax ; Save the length of the read line
+
+    ; Ensure bytesRead is preserved before any other function calls
+    mov eax, bytesRead
+
+    ret
+ReadLine ENDP
+
+ReadLine1 PROC
+    mov ecx, MAX_LINE_LENGTH
+    mov edx, OFFSET line1 
+    call ReadFromFile
+    mov bytesRead1, eax ; Save the length of the read line
+
+    ; Ensure bytesRead is preserved before any other function calls
+    mov eax, bytesRead1
+
+    ret
+ReadLine1 ENDP
+
+ConvertStringToInt PROC
+    XOR EAX, EAX  ; Clear EAX to store the result
+
+convertLoop:
+    MOVZX EDX, BYTE PTR [ESI]  ; Load the next character into EDX, zero-extending to 32 bits
+    CMP DL, 0  ; Check if we reached the end of the string
+    JE  convertDone
+
+    SUB EDX, '0'  ; Convert ASCII character to integer
+    IMUL EAX, EAX, 10  ; Multiply current result by 10
+    ADD EAX, EDX  ; Add the current digit to the result
+
+    INC ESI  ; Move to the next character
+    JMP convertLoop
+
+convertDone:
+    RET
+ConvertStringToInt ENDP
+
+seperating proc
+    mov eax, 0
+    mov ebx, 0
+    mov ecx, 0
+    mov esi, 0
+
+    ; Clear the buffer and variables
+    call OpenInputFile
+    mov fileHandle, eax
+    mov bytesRead, 0  
+    call ReadLine
+    mov eax, fileHandle
+    call CloseFile
+
+    ; Tokenize the first part of the line
+    mov ecx, lengthof line
+    mov esi, 0
+    mov ebx, 0
+
+l1:
+    mov al, [line+esi]
+    cmp al, space
+    je next1
+    mov [var12+ebx], al
+    inc esi
+    inc ebx
+    loop l1
+
+next1:
+    ; Tokenize the second part of the line
+    add esi, 1 ; Move past the space
+    mov ecx, lengthof line
+    mov ebx, 0
+
+l2:
+    mov al, [line+esi]
+    cmp al, space
+    je next2
+    mov [var2+ebx], al
+    inc esi
+    inc ebx
+    loop l2
+
+next2:
+    ; Tokenize the third part of the line
+    add esi, 1 ; Move past the space
+    mov ecx, lengthof line
+    mov ebx, 0
+
+l3:
+    mov al, [line+esi]
+    cmp al, space
+    je next3
+    mov [var3+ebx], al
+    inc esi
+    inc ebx
+    loop l3
+
+next3:
+    ; Tokenize the fourth part of the line
+    add esi, 1 ; Move past the space
+    mov ecx, lengthof line
+    mov ebx, 0
+
+l4:
+    mov al, [line+esi]
+    cmp al, space
+    je next4
+    mov [var4+ebx], al
+    inc esi
+    inc ebx
+    loop l4
+
+next4:    
+    ; Print the three tokenized strings
+    push esi
+
+    mov edx, offset var12
+   ; call writestring
+    ;call crlf
+    lea esi, var12
+    call ConvertStringToInt
+    mov mainid, eax
+    mov var12,0
+
+
+    mov edx, offset var2
+    ;call writestring
+    ;call crlf
+    mov var2,0
+
+
+
+    mov edx, offset var3
+    ;call writestring
+    ;call crlf
+    lea esi, var3
+    call ConvertStringToInt
+    mov ebx, eax
+    mov var3,0
+
+
+    mov edx, offset var4
+    ;call writestring
+    ;call crlf
+    lea esi, var4
+    call ConvertStringToInt
+    mov var4,0
+
+    pop esi
+
+
+    
+ret
+seperating endp
+
+
+scorecal proc
+    cmp eax, 75
+    jle jump12
+
+    cmp eax, 76
+    jle jump13
+
+    cmp eax, 77
+    jle jump14
+
+    cmp eax, 78
+    jle jump15
+
+    cmp eax, 79
+    jle jump16
+
+    cmp eax, 80
+    jle jump17
+
+    cmp eax, 81
+    jle jump18
+
+    cmp eax, 82
+    jle jump19
+
+    cmp eax, 83
+    jle jump20
+
+    cmp eax, 84
+    jle jump21
+
+    cmp eax, 85
+    jle jump22
+
+    cmp eax, 86
+    jle jump23
+
+    cmp eax, 87
+    jle jump24
+
+    cmp eax, 88
+    jle jump25
+
+    cmp eax, 89
+    jle jump26
+
+    cmp eax, 90
+    jle jump27
+
+    cmp eax, 91
+    jle jump28
+
+    cmp eax, 92
+    jle jump29
+
+    cmp eax, 93
+    jle jump30
+
+    jump12:
+    add score,20
+    jmp lastmile
+
+    jump13:
+    add score,21
+    jmp lastmile
+
+    jump14:
+    add score,22
+    jmp lastmile
+
+       jump15:
+    add score,23
+    jmp lastmile
+
+       jump16:
+    add score,24
+    jmp lastmile
+
+       jump17:
+    add score,25
+    jmp lastmile
+
+       jump18:
+    add score,26
+    jmp lastmile
+
+       jump19:
+    add score,27
+    jmp lastmile
+
+        jump20:
+    add score,28
+    jmp lastmile
+
+          jump21:
+    add score,29
+    jmp lastmile
+
+          jump22:
+    add score,30
+    jmp lastmile
+
+          jump23:
+    add score,31
+    jmp lastmile
+
+          jump24:
+    add score,32
+    jmp lastmile
+
+          jump25:
+    add score,33
+    jmp lastmile
+
+          jump26:
+    add score,34
+    jmp lastmile
+
+          jump27:
+    add score,35
+    jmp lastmile
+
+          jump28:
+    add score,36
+    jmp lastmile
+
+          jump29:
+    add score,37
+    jmp lastmile
+
+          jump30:
+    add score,38
+    jmp lastmile
+
+
+    
+
+    lastmile:
+    cmp ebx, 1000
+    jle jump1
+    
+    cmp ebx, 1100
+    jle jump2
+
+    cmp ebx, 1200
+    jle jump3
+
+     cmp ebx, 1300
+    jle jump4
+
+     cmp ebx, 1400
+    jle jump5
+
+     cmp ebx, 1500
+    jle jump6
+
+     cmp ebx, 1600
+    jle jump7
+
+     cmp ebx, 1700
+    jle jump8
+
+     cmp ebx, 1800
+    jle jump9
+
+     cmp ebx, 1900
+    jle jump10
+
+     cmp ebx, 2000
+    jle jump11
+
+    jump1:
+    sub score,1
+    jmp percentage
+
+    jump2:
+    sub score,2
+    jmp percentage
+
+    jump3:
+    sub score,3
+    jmp percentage
+
+    jump4:
+    sub score,4
+    jmp percentage
+
+     jump5:
+    sub score,5
+    jmp percentage
+
+     jump6:
+    sub score,6
+    jmp percentage
+
+     jump7:
+    sub score,7
+    jmp percentage
+
+     jump8:
+    sub score,8
+    jmp percentage
+
+     jump9:
+    sub score,9
+    jmp percentage
+
+     jump10:
+    sub score,10
+    jmp percentage
+
+    jump11:
+    sub score,11
+    jmp percentage
+
+
+
+    percentage:
+    mov eax, score
+    mov score,0
+    ret
+
+
+scorecal endp
+
+small_large PROC
+mov eax,0
+ mov ecx, 7
+mov eax, [score_array+0]
+mov small, eax
+mov large, eax
+mov ebx, 1
+
+l1:
+mov eax, [score_array+ebx*4]
+cmp eax, small
+jl smallest
+cmp eax, large
+ja largest
+inc ebx
+loop l1
+
+cmp ecx, 0
+jmp here3
+
+smallest:
+mov small, eax
+jmp l1
+
+largest:
+mov large, eax
+jmp l1
+
+here3:
+ret
+
+small_large ENDP
+
+
+
+announce proc
+     mov eax, 0
+     mov eax, large
+     cmp eax, [score_array+0]
+     je win1
+
+     mov eax, large
+     cmp eax, [score_array+4]
+     je win2
+
+
+     mov eax, large
+     cmp eax, [score_array+8]
+     je win3
+
+
+     mov eax, large
+     cmp eax, [score_array+12]
+     je win4
+
+
+     mov eax, large
+     cmp eax, [score_array+16]
+     je win5
+
+
+     mov eax, large
+     cmp eax, [score_array+20]
+     je win6
+
+
+     mov eax, large
+     cmp eax, [score_array+24]
+     je win7
+
+
+     mov eax, large
+     cmp eax, [score_array+28]
+     je win8
+
+     win1:
+     mov edx, offset filename1
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+         win2:
+     mov edx, offset filename2
+     call seperating
+     mov eax, mainid
+     mov idwin, eax 
+     jmp final
+
+         win3:
+     mov edx, offset filename3
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+         win4:
+     mov edx, offset filename4
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+         win5:
+     mov edx, offset filename5
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+         win6:
+     mov edx, offset filename6
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+         win7:
+     mov edx, offset filename7
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+         win8:
+     mov edx, offset filename8
+     call seperating
+     mov eax, mainid
+     mov idwin, eax
+     jmp final
+
+
+     final:
+     mov eax, idwin
+     ret
+
+announce endp
+
+
+Display PROC
+call crlf
+mov edx,offset H1
+call writestring
+call crlf
+mov edx,offset H2
+call writestring
+call crlf
+mov edx,offset H3
+call writestring
+call crlf
+mov edx,offset H4
+call writestring
+call crlf
+mov edx,offset H5
+call writestring
+
+mov dh,7
+mov dl,0
+call gotoxy
+mov edx,offset H6
+call writestring
+call crlf
+mov edx,offset H7
+call writestring
+call crlf
+mov edx,offset H8
+call writestring
+call crlf
+mov edx,offset H9
+call writestring
+call crlf
+mov edx,offset H10
+call writestring
+
+
+mov edx,0
+mov dh,18
+mov dl,45
+call gotoxy
+mov edx,offset MEM
+call writestring
+mov edx,0
+mov dh,19
+mov dl,45
+call gotoxy
+mov edx,offset MEM1
+call writestring
+mov edx,0
+mov dh,20
+mov dl,45
+call gotoxy
+mov edx,offset MEM2
+call writestring
+mov edx,0
+mov dh,21
+mov dl,45
+call gotoxy
+mov edx,offset MEM3
+call writestring
+
+
+mov edx,0
+mov dl,40
+mov dh,25
+call gotoxy
+mov edx,offset msg
+call writestring
+call readChar
+call clrscr
+ret
+Display ENDP
+
+
+Menu PROC
+mov edx,0
+mov dh,5
+mov dl,50
+call gotoxy
+mov edx,offset msg1
+call writestring
+
+mov edx,0
+mov dh,7
+mov dl,50
+call gotoxy
+mov edx,offset msg2
+call writestring
+
+
+mov edx,0
+mov dh,8
+mov dl,50
+call gotoxy
+mov edx,offset msg3
+call writestring
+
+
+mov edx,0
+mov dh,9
+mov dl,50
+call gotoxy
+mov edx,offset msg4
+call writestring
+
+mov edx,0
+mov dh,10
+mov dl,50
+call gotoxy
+mov edx,offset msg5
+call writestring
+CALL READINT
+MOV CHOICE, AL
+
+ret
+Menu ENDP
+
+
+inputadmin proc
+    mov edx, offset adminidprompt
+    call writestring
+
+    mov edx, offset adminidentity1
+    mov ecx, SIZEOF adminidentity1
+    call readstring
+    mov byte ptr [edx + ecx], 0 ; Null-terminate adminidentity1
+
+    mov edx, offset adminpassprompt
+    call writestring
+
+    mov edx, offset adminpassword1
+    mov ecx, SIZEOF adminpassword1
+    call readstring
+    mov byte ptr [edx + ecx], 0 ; Null-terminate adminpassword1
+
+ret
+inputadmin endp
+
+
+
+checkadmin proc
+
+mov esi, offset adminid
+mov edi, offset adminidentity1
+cmpsd
+je next1
+jmp close
+next1:
+mov esi, offset adminpassword
+mov edi, offset adminpassword1
+cmpsd
+je next2
+jmp close
+
+next2:
+mov eax, adminapprove
+mov eax, 1
+mov adminapprove, eax
+jmp endd
+
+close:
+mov eax, adminapprove
+mov eax, 0
+mov adminapprove, eax
+
+endd:
+
+ret 
+checkadmin endp
+
+
+adminportal proc
+push ebp 
+mov ebp, esp
+call clrscr
+again1:
+call clrscr
+call adminportal_menu
+
+cmp admin_CHOICE, 1
+jge choose
+mov edx, offset invalidinput
+call writestring
+call clrscr
+jmp again1
+
+choose:
+cmp admin_CHOICE, 6
+jle choose1
+mov edx, offset invalidinput
+call writestring
+call clrscr
+jmp again1
+
+
+choose1:
+cmp admin_CHOICE, 1
+je firstOption
+
+cmp admin_CHOICE, 2
+;je secondOption
+
+cmp admin_CHOICE, 3
+;je thirdOption
+
+cmp admin_CHOICE, 4
+;je fourthOption
+
+cmp admin_CHOICE, 5
+je fifthOption
+
+cmp admin_CHOICE, 6
+je sixthOption
+
+
+firstOption:
+call admin_firstopt
+jmp again1
+
+fifthOption:
+mov edx, offset budget
+call writestring
+mov eax, budget_am
+call writedec
+call crlf
+
+
+sixthOption:
+
+pop ebp
+ret
+adminportal endp
+
+
+admin_firstopt proc
+
+mov edx, offset newadmin
+call writestring
+mov edx, offset adminid
+mov ecx, sizeof adminid
+call readstring
+
+mov edx, offset newpass
+call writestring
+mov edx, offset adminpassword
+mov ecx, sizeof adminpassword
+call readstring
+
+mov edx, offset adminupdated
+call writestring
+
+ret
+admin_firstopt endp
+
+
+adminportal_menu proc
+
+mov edx,0
+mov dh,5
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg1
+call writestring
+
+mov edx,0
+mov dh,7
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg2
+call writestring
+
+
+mov edx,0
+mov dh,8
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg3
+call writestring
+
+
+mov edx,0
+mov dh,9
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg4
+call writestring
+
+mov edx,0
+mov dh,10
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg5
+call writestring
+
+mov edx,0
+mov dh,11
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg6
+call writestring
+
+mov edx,0
+mov dh,12
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg7
+call writestring
+
+mov edx,0
+mov dh,13
+mov dl,50
+call gotoxy
+mov edx,offset admin_msg8
+call writestring
+mov eax, 0
+CALL READINT
+MOV admin_CHOICE, AL
+ret
+adminportal_menu endp
+
+
+announce_result proc
+
+mov edx, offset prompt3
+call writestring
+call readint
+cmp eax, idwin
+je gowin
+mov edx, offset prompt5
+call writestring
+
+jmp golose
+
+gowin:
+mov edx, offset prompt4
+call writestring
+
+
+golose:
+ret
+
+
+announce_result endp
+
+veiw_student proc
+    mov eax, 0
+    mov ebx, 0
+    mov ecx, 0
+    mov esi, 0
+
+    ; Clear the buffer and variables
+    call OpenInputFile
+    mov fileHandle1, eax
+    mov bytesRead1, 0  
+    call ReadLine1
+    mov eax, fileHandle1
+    call CloseFile
+
+    ; Tokenize the first part of the line
+    mov ecx, lengthof line1
+    mov esi, 0
+    mov ebx, 0
+
+l1:
+    mov al, [line1+esi]
+    cmp al, space
+    je next1
+    mov [var12_new+ebx], al
+    inc esi
+    inc ebx
+    loop l1
+
+next1:
+    ; Tokenize the second part of the line
+    add esi, 1 ; Move past the space
+    mov ecx, lengthof line1
+    mov ebx, 0
+
+l2:
+    mov al, [line1+esi]
+    cmp al, space
+    je next2
+    mov [var2_new+ebx], al
+    inc esi
+    inc ebx
+    loop l2
+
+next2:
+    ; Tokenize the third part of the line
+    add esi, 1 ; Move past the space
+    mov ecx, lengthof line1
+    mov ebx, 0
+
+l3:
+    mov al, [line1+esi]
+    cmp al, space
+    je next3
+    mov [var3_new+ebx], al
+    inc esi
+    inc ebx
+    loop l3
+
+next3:
+    ; Tokenize the fourth part of the line
+    add esi, 1 ; Move past the space
+    mov ecx, lengthof line1
+    mov ebx, 0
+
+l4:
+    mov al, [line1+esi]
+    cmp al, space
+    je next4
+    mov [var4_new+ebx], al
+    inc esi
+    inc ebx
+    loop l4
+
+next4: 
+    mov edx, offset name_prmpt
+    call writestring
+    mov edx, offset var12_new
+    call writestring
+    call crlf
+    lea esi, var12_new
+    call ConvertStringToInt
+    mov var12_new,0
+
+
+
+    mov edx, offset name_prmpt1
+    call writestring
+    mov edx, offset var2_new
+    call writestring
+    call crlf
+    mov var2_new,0
+
+        mov edx, offset name_prmpt2
+    call writestring
+    mov edx, offset var3_new
+    call writestring
+    call crlf
+       lea esi, var3_new
+    call ConvertStringToInt
+    mov ebx, eax
+    mov var3_new,0
+
+ 
+     mov edx, offset name_prmpt3
+    call writestring
+    mov edx, offset var4_new
+    call writestring
+    call crlf
+        lea esi, var4_new
+    call ConvertStringToInt
+    mov var4_new,0
+
+ret
+
+veiw_student endp
+
+
+
+veiw_student_proto proc
+    mov edx, offset filename1
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+    mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename2
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename3
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename4
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename5
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename6
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename7
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+       mov edx, offset filename8
+    call veiw_student
+    call scorecal
+    mov edx, offset name_prmpt4
+    call writestring
+    call writedec
+    call crlf
+        mov edx, offset line_break
+    call writestring
+    call crlf
+
+    ret
+
+veiw_student_proto endp
+
+main proc
+
+    mov edx, offset filename1
+    call seperating
+    call scorecal
+    mov score1,eax
+    mov [score_array+0],eax
+
+
+
+    mov edx, offset filename2
+    call seperating
+    call scorecal
+        mov score2,eax
+    mov [score_array+4],eax
+
+     
+    mov edx, offset filename3
+    call seperating
+    call scorecal
+        mov score3,eax
+    mov [score_array+8],eax
+
+
+       mov edx, offset filename4
+    call seperating
+    call scorecal
+        mov score4,eax
+    mov [score_array+12],eax
+
+
+       mov edx, offset filename5
+    call seperating
+    call scorecal
+        mov score5,eax
+    mov [score_array+16],eax
+ 
+
+
+       mov edx, offset filename6
+    call seperating
+    call scorecal
+        mov score6,eax
+    mov [score_array+20],eax
+ 
+
+       mov edx, offset filename7
+    call seperating
+    call scorecal
+        mov score6,eax
+    mov [score_array+24],eax
+
+
+       mov edx, offset filename8
+    call seperating
+    call scorecal
+        mov score1,eax
+    mov [score_array+28],eax
+ 
+
+    mov ecx,0
+
+    call small_large
+    mov eax, large
+    call announce
+
+    ;================================================
+
+    call Display
+retry:
+call Menu
+
+
+cmp CHOICE, 1
+jge choose
+mov edx, offset invalidinput
+call writestring
+call clrscr
+jmp retry
+
+choose:
+cmp CHOICE, 3
+jle choose1
+mov edx, offset invalidinput
+call writestring
+call clrscr
+jmp retry
+
+
+choose1:
+cmp CHOICE, 1
+je firstOption
+
+cmp CHOICE, 2
+je secondOption
+
+cmp CHOICE, 3
+je thirdOption
+
+
+firstOption:
+call inputadmin
+call checkadmin
+
+
+
+
+cmp adminapprove, 1
+je adminportal1
+mov edx, offset adminstr1
+call writestring
+
+call clrscr
+jmp retry
+
+
+adminportal1:
+;admin portal
+call adminportal
+jmp retry
+
+
+secondOption:
+;student portal
+call announce_result
+
+thirdOption:
+ending:
+
+
+;call veiw_student_proto
+
+
+
+
+
+    
+
+    exit
+main endp
+
+END main

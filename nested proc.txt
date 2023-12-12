@@ -1,0 +1,66 @@
+TITLE 22k-4489 (Task-03.asm)
+INCLUDE Irvine32.inc
+.data
+array1 dWORD 1,2,3,4,5
+array2 dword 6,7,8,9,10
+arr1sum dword 0
+arr2sum dword 0
+prmp byte "The sum offset both array is: ",0
+
+.code
+main PROc
+
+         call array1sum
+
+exit
+main endp
+
+array1sum proc
+
+mov ecx, 5
+mov esi, 0
+mov eax, 0
+l1:
+add eax, [array1+esi*4]
+inc esi
+
+loop l1
+
+call array2sum
+      
+EXIT
+array1sum ENDP
+
+
+array2sum proc
+
+mov ecx, 5
+mov esi, 0
+mov ebx, 0
+l1:
+add ebx, [array2+esi*4]
+inc esi
+
+loop l1
+
+call sum
+exit
+array2sum endp
+
+
+sum proc
+
+
+mov edx, offset prmp
+call writestring
+add eax,ebx
+mov ecx,eax
+call writedec
+
+exit
+sum endp
+
+
+
+END main
+++++++++++++++++++++++========================================================================

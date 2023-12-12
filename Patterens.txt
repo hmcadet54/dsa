@@ -1,0 +1,219 @@
+TITLE 22k-4489(task-2-A.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov ecx, 4                           1
+mov ebx, 1                           11
+outer:                               111
+      mov edx,ecx                    1111
+      mov ecx, ebx
+      inner:
+            mov eax, 1
+            call writedec
+      loop inner
+      call crlf
+      inc ebx
+      mov ecx, edx
+loop outer
+endd:
+
+
+
+    exit
+main ENDP
+
+END main
+
+
+======================================================================
+
+TITLE 22k-4489(task-2-B.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov eax, 1
+mov ecx, 4
+outer:
+      mov edx,ecx                     1111
+      mov ebx,1                       111 
+      inner:                          11
+            mov eax,1                 1 
+            call writedec
+            inc ebx
+      loop inner
+      call crlf
+      mov ecx, edx
+loop outer
+
+
+
+    exit
+main ENDP
+
+END main
+==========================================================================
+
+TITLE 22k-4489(task-2-C.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov eax, 1
+mov ecx, 4
+outer:
+      mov edx,ecx                  4321
+      mov eax,5                    432
+      inner:                       42
+            dec eax                4
+            call writedec
+      loop inner
+      call crlf
+      mov ecx, edx
+loop outer
+
+    exit
+main ENDP
+
+END main
+
+
+===========================================================================
+
+TITLE 22k-4489(task-2-D.asm)
+INCLUDE Irvine32.inc
+.data
+
+.code 
+main PROC
+
+mov eax, 1                       1234
+mov ecx, 4                       123
+outer:                           12
+      mov edx,ecx                1                   
+      mov eax,0                                    
+      inner:                                       
+            inc eax                                
+            call writedec
+      loop inner
+      call crlf
+      mov ecx, edx
+loop outer
+
+    exit
+main ENDP
+
+END main
+
+==================================================================================
+
+TITLE 22k-4489 (Task-04.asm)
+INCLUDE Irvine32.inc
+.data
+space byte " ",0
+star byte "*",0
+prompt byte "Enter Number offset lines you want to print star: ",0
+var dword ?
+
+.code
+main PROc
+mov edx, offset prompt                             *
+call writestring                                  **
+call readint                                     ***
+mov var, eax                                    ****
+mov ecx, var                                   *****
+mov eax, ecx
+dec eax
+mov ebx,0
+outer:
+push ecx
+inc ebx
+mov ecx, eax
+        inner1:
+        cmp ecx,0
+        jne endd
+        jmp here
+        endd:
+        mov edx, offset space
+        call writestring
+        loop inner1
+        here:
+        mov ecx, ebx
+        inner2:
+        mov edx, offset star
+        call writestring
+        loop inner2
+dec eax
+pop ecx
+call crlf
+loop outer
+
+exit
+main endp
+END main
+
+
+===============================================================================================
+
+TITLE 22k-4489 (Task-05.asm)
+INCLUDE Irvine32.inc
+.data
+space byte " ",0
+alp byte "ABCDEFGHIJKLMNOPQRSTUV",0
+prompt byte "Enter Number of lines you want to print Alpahbets: ",0
+var dword ?
+
+.code
+main PROc 
+mov edx, offset prompt                               A
+call writestring                                    B C
+call readint                                       D E F
+mov var, eax                                      G H I J
+mov ecx, var                                     K L M N O 
+mov eax, ecx
+dec eax
+mov ebx,0
+mov esi, 0
+outer:
+push ecx
+inc ebx
+mov ecx, eax
+        inner1:
+        cmp ecx,0
+        jne endd
+        jmp here
+        endd:
+        mov edx, offset space
+        call writestring
+        loop inner1
+        here:
+        mov ecx, ebx
+        push eax
+        inner2:
+        mov edx, offset space
+        call writestring
+        movzx eax, [alp+esi]
+        call writechar
+        inc esi
+        loop inner2
+        pop eax
+dec eax
+pop ecx
+call crlf
+loop outer
+
+exit
+main endp
+END main
+
+=============================================================================================
+
+
+

@@ -1,0 +1,318 @@
+1- moving of array element to another using stack
+2- addition of 3 intgers using stack
+3- nested proceuder
+4- *
+  **
+ ***
+****
+5- alphabets Triangle
+6 sum to (n) numbers
+
+TITLE 22k-4489 (Task-01.asm)
+INCLUDE Irvine32.inc
+.data
+array WORD 1,2,3,4,5,6,7,8,9,10
+array1 word 10 dup(?)
+.code
+main PROc
+       mov ecx, 10
+	   mov esi, 0
+	   ;pushing stack the array
+       l1:
+	   mov ax, [array+esi*2] 
+	   push ax
+	   inc esi
+	   loop l1
+
+	   ;poping array into array1
+	   mov esi,0
+	   mov ecx,10
+	   l2:
+	   pop bx
+	   mov [array1+esi*2], bx
+	   inc esi
+	   loop l2
+
+	   ;print all elemnts of array1
+	   mov ecx, 10
+	   mov esi, 9
+	   print:
+	   mov ax, [array1+esi*2]
+	   movzx eax, ax
+	   call writedec
+	   call crlf
+	   dec esi
+	   loop print
+
+
+CALL DumpRegs
+EXIT
+main ENDP
+END main
+===========================================================================================================
+
+
+TITLE 22k-4489 (Task-02.asm)
+INCLUDE Irvine32.inc
+.data
+     array dword 1,2,3
+	 varsum dword ?
+	 prp byte "The Sum of Three Numbers Are: ",0
+
+.code
+main PROC
+         mov esi, 0
+		 mov ecx, 3
+		 l1:
+         mov eax, [array+esi*4]
+		 push eax
+		 inc esi
+		 loop l1
+
+		 mov ebx, 0
+		 mov ecx, 3
+		 mov esi, 0
+		 l2:
+		 pop edx
+		 mov ebx, edx
+		 add varsum,edx
+		 inc esi
+		 loop l2
+		 mov edx, offset prp
+		 call writestring
+		 mov eax, varsum
+		 call writedec
+
+exit
+main ENDP
+END main
+
+=========================================================================================================
+
+TITLE 22k-4489 (Task-03.asm)
+INCLUDE Irvine32.inc
+.data
+array1 dWORD 1,2,3,4,5
+array2 dword 6,7,8,9,10
+arr1sum dword 0
+arr2sum dword 0
+prmp byte "The sum offset both array is: ",0
+
+.code
+main PROc
+
+         call array1sum
+
+exit
+main endp
+
+array1sum proc
+
+mov ecx, 5
+mov esi, 0
+mov eax, 0
+l1:
+add eax, [array1+esi*4]
+inc esi
+
+loop l1
+
+call array2sum
+      
+EXIT
+array1sum ENDP
+
+
+array2sum proc
+
+mov ecx, 5
+mov esi, 0
+mov ebx, 0
+l1:
+add ebx, [array2+esi*4]
+inc esi
+
+loop l1
+
+call sum
+exit
+array2sum endp
+
+
+sum proc
+
+
+mov edx, offset prmp
+call writestring
+add eax,ebx
+mov ecx,eax
+call writedec
+
+exit
+sum endp
+
+
+
+END main
+
+
+===================================================================================================
+
+TITLE 22k-4489 (Task-04.asm)
+INCLUDE Irvine32.inc
+.data
+space byte " ",0
+star byte "*",0
+prompt byte "Enter Number offset lines you want to print star: ",0
+var dword ?
+
+.code
+main PROc
+mov edx, offset prompt
+call writestring
+call readint
+mov var, eax
+mov ecx, var
+mov eax, ecx
+dec eax
+mov ebx,0
+outer:
+push ecx
+inc ebx
+mov ecx, eax
+        inner1:
+        cmp ecx,0
+        jne endd
+        jmp here
+        endd:
+        mov edx, offset space
+        call writestring
+        loop inner1
+        here:
+        mov ecx, ebx
+        inner2:
+        mov edx, offset star
+        call writestring
+        loop inner2
+dec eax
+pop ecx
+call crlf
+loop outer
+
+exit
+main endp
+END main
+
+
+============================================================================================================
+
+TITLE 22k-4489 (Task-05.asm)
+INCLUDE Irvine32.inc
+.data
+space byte " ",0
+alp byte "ABCDEFGHIJKLMNOPQRSTUV",0
+prompt byte "Enter Number of lines you want to print Alpahbets: ",0
+var dword ?
+
+.code
+main PROc
+mov edx, offset prompt
+call writestring
+call readint
+mov var, eax
+mov ecx, var
+mov eax, ecx
+dec eax
+mov ebx,0
+mov esi, 0
+outer:
+push ecx
+inc ebx
+mov ecx, eax
+        inner1:
+        cmp ecx,0
+        jne endd
+        jmp here
+        endd:
+        mov edx, offset space
+        call writestring
+        loop inner1
+        here:
+        mov ecx, ebx
+        push eax
+        inner2:
+        mov edx, offset space
+        call writestring
+        movzx eax, [alp+esi]
+        call writechar
+        inc esi
+        loop inner2
+        pop eax
+dec eax
+pop ecx
+call crlf
+loop outer
+
+exit
+main endp
+END main
+
+===========================================================================================================
+
+TITLE 22k-4489 (Task-06.asm)
+INCLUDE Irvine32.inc
+.data
+prompt byte "Enter Number (n): ",0
+pmp1 byte "The sum of numbers till (n) is : ",0
+
+.code
+main PROc
+mov edx, offset prompt
+call writestring
+call readint
+mov ecx, eax
+mov eax, 0
+mov ebx,1
+l1:
+add eax, ebx
+inc ebx
+loop l1
+mov edx, offset pmp1
+call writestring
+call writedec
+
+exit
+main endp
+END main
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

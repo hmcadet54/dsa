@@ -1,0 +1,343 @@
+1-cmpsd
+2-repe cmpsd break if first mis match occur
+
+
+cmpsd ; like cmp [esi], [edi] except cmp can not take two memory operands
+
+INCLUDE Irvine32.inc
+
+.DATA
+    SOURCE DWORD 1234h
+    TARGET DWORD 5678h
+    MSG1 BYTE "Source is greater than Target.", 0
+    MSG2 BYTE "Source is less than or equal to Target.", 0
+
+.CODE
+main PROC
+    mov esi, OFFSET SOURCE
+    mov edi, OFFSET TARGET
+    cmpsd ; like cmp [esi], [edi] except cmp can not take two memory operands
+    ja l1
+    jmp l2
+
+l1:
+    mov edx, OFFSET MSG1
+    call WriteString
+    jmp quit
+
+l2:
+    mov edx, OFFSET MSG2
+    call WriteString
+
+quit:
+    exit
+main ENDP
+
+END main
+
+=================================================
+
+repe cmpsb ; compare the two arrays and stop at the first mismatc
+
+include irvine32.inc
+
+.data
+    source BYTE 'ameen',0
+    target BYTE 'aaman',0
+    strSmall BYTE "source is smaller",0
+    strGreat BYTE "source is greater",0
+    strEqual BYTE "both strings are equal",0
+
+.code
+main PROC
+    cld ; clear the direction flag
+    mov esi, OFFSET source
+    mov edi, OFFSET target
+    mov ecx, LENGTHOF source
+    repe cmpsb ; compare the two arrays and stop at the first mismatch
+
+    jb source_smaller ; check last char in source and last
+    ja source_greater ; char in dest
+
+    ; Strings are equal
+    mov edx, OFFSET strEqual
+    jmp done
+
+source_smaller:
+    ; Source is smaller
+    mov edx, OFFSET strSmall
+    jmp done
+
+source_greater:
+    ; Source is greater
+    mov edx, OFFSET strGreat
+
+done:
+    call WriteString
+    call Crlf
+    exit
+
+main ENDP
+
+end main
+
+
+==================================================
+repne scasb - search value moved in al with the byte string saved in 
+
+include irvine32.inc
+
+.data
+    str1 BYTE "hello world", 0
+
+.code
+main PROC
+    cld                  ; Clear direction flag for forward movement
+    mov edi, OFFSET str1 ; Set destination index to the address of str1
+    mov al, 'w'          ; Set the value to search for ('w')
+    mov ecx, LENGTHOF str1 ; Set the loop counter to the length of str1
+    repne scasb           ; Scan string until 'w' is found
+
+    jne not_found         ; Jump to not_found label if 'w' is not found
+
+    ; 'w' is found, calculate the index
+    mov eax, LENGTHOF str1 - 1 ; Initialize eax with lengthof(str1) - 1
+    sub eax, ecx             ; Subtract the reversed index (ecx) from eax
+    jmp done
+
+not_found:
+    mov eax, -1             ; Set eax to -1 if 'w' is not found
+
+done:
+    ; eax now contains the index of 'w' or -1 if not found
+    call WriteInt
+    exit
+
+main ENDP
+
+end main
+
+
+============================================
+
+TASK_01
+
+include irvine32.inc
+
+.data
+    str1 BYTE "127&j~3@^&*@*@45^", 0
+    pmp BYTE "Found at Index: ", 0
+
+.code
+searching PROC
+    cld
+    mov edi, OFFSET str1
+    mov al, '@'
+    mov ecx, LENGTHOF str1
+    repne scasb
+
+    jne not_found
+    mov edx, OFFSET pmp
+    call WriteString
+    mov eax, LENGTHOF str1 - 1
+    sub eax, ecx
+    call WriteInt ; Display the index
+    jmp done
+
+not_found:
+    mov eax, -1
+
+done:
+    ret ; Return from the procedure
+
+searching ENDP
+
+main PROC
+    call searching
+
+    exit
+main ENDP
+
+end main
+
+
+===================================================
+
+Task 02
+
+include irvine32.inc
+
+.data
+    str1 BYTE "127&j~3@^&*@*@45^", 0
+    pmp BYTE "Found at Index: ", 0
+
+.code
+searching PROC USES edi ecx, pStr:PTR BYTE, searchChar:BYTE
+    cld
+    mov edi, OFFSET str1
+    mov al, '@'
+    mov ecx, LENGTHOF str1
+    repne scasb
+
+    jne not_found
+    mov edx, OFFSET pmp
+    call WriteString
+    mov eax, LENGTHOF str1 - 1
+    sub eax, ecx
+    call WriteInt ; Display the index
+    jmp done
+
+not_found:
+    mov eax, -1
+
+done:
+    ret ; Return from the procedure
+
+searching ENDP
+
+main PROC
+    call searching
+	mov edi, offset str1
+	mov al, '@'
+    exit
+main ENDP
+
+end main
+
+=====================================================
+
+TASK_03
+
+include irvine32.inc
+
+.data
+    source BYTE 'Abdullah',0
+    target BYTE 'Abdullah',0
+    strSmall BYTE "STRING-1 is smaller",0
+    strGreat BYTE "STRING-1 is greater",0
+    strEqual BYTE "both strings are equal",0
+
+.code
+main PROC
+    cld
+    mov esi, OFFSET source
+    mov edi, OFFSET target
+    mov ecx, LENGTHOF source
+    repe cmpsb 
+
+    jb source_smaller 
+    ja source_greater 
+
+    mov edx, OFFSET strEqual
+    jmp done
+
+source_smaller:
+    mov edx, OFFSET strSmall
+    jmp done
+
+source_greater:
+    mov edx, OFFSET strGreat
+
+done:
+    call WriteString
+    call Crlf
+    exit
+
+main ENDP
+
+end main
+
+==================================================
+
+
+
+include irvine32.inc
+
+.data
+    str1 BYTE "127 &j~ 3@^& *@*@45^", 0
+	space byte " ",0
+	str2 byte 12 dup(?),0
+	
+
+.code
+
+main PROC
+    mov ecx, 12
+	mov ebx, 0
+	l1:
+	l4:
+	movzx eax, Byte ptr [str1+ebx]
+	cmp al, space
+	je l2
+	push eax
+	inc ebx
+	loop l1
+
+	jmp done
+
+
+	l2:
+	  mov esi, 0
+	  mov ecx, ebx
+	  l3:
+	  pop eax
+	  mov [str2+esi], al
+	  inc esi
+	  loop l3
+	  jmp l4
+	done:
+
+	mov edx, offset str2
+	call writestring
+    exit
+main ENDP
+
+end main
+=========================
+
+
+
+include irvine32.inc
+
+.data
+    str1 BYTE "abs cf erf", 0
+	space byte " ",0
+	str2 byte 12 dup(?),0
+	
+
+.code
+
+main PROC
+    mov ecx, 12
+	mov ebx, 0
+	l1:
+	l4:
+	movzx eax, Byte ptr [str1+ebx]
+	inc ebx
+	cmp al, space
+	je l2
+	push eax
+	loop l1
+
+	jmp done
+
+
+	l2:
+	  mov esi, 0
+	  mov edx, ecx
+	  mov ecx, ebx
+	  l3:
+	  pop eax
+	  mov [str2+esi], al
+	  inc esi
+	  loop l3
+	  mov ecx, edx
+	  jmp l4
+	done:
+
+	mov edx, offset str2
+	call writestring
+    exit
+main ENDP
+
+end main

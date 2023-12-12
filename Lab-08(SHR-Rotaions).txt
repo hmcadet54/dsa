@@ -1,0 +1,398 @@
+1- SHR multipliaction
+2-Give an assembly language program to move -128 in ax and expand eax. Using shift and rotate
+instruction.
+3-extration of minutes
+4-val1 = (val2 / val3) * (val1 / val2);
+5-Create a procedure Extended_Add procedure to add two 64-bit (8-byte) integers.
+6- Isprime
+7-encryption usig rotate operation
+
+
+
+Task01
+
+
+INCLUDE irvine32.inc
+.data
+
+.code
+main proc
+
+mov eax, 5
+mov ebx, 5
+mov ecx, 5
+
+shl eax, 4
+shl ebx, 2
+shl ecx, 0
+
+add eax, ebx
+add eax, ecx
+
+
+
+call dumpregs
+exit
+main ENDP
+END main
+
+=================================================================
+
+Task02
+
+INCLUDE irvine32.inc
+
+.data
+
+.code
+main PROC
+
+mov eax, 0
+mov ax, -128
+shl eax, 16
+call dumpregs 
+sar eax, 16
+call dumpregs
+    exit
+
+main ENDP
+END main
+====================================================================
+
+Task03
+
+INCLUDE Irvine32.inc
+
+.data
+timeStamp WORD ?
+bMinutes BYTE 0
+
+.code
+main PROC
+     mov ax, 78
+     shr ax, 5
+     and al, 1
+     movzx eax, al
+
+     mov byte ptr bMinutes, al
+
+     exit
+main ENDP
+
+END main
+
+=======================================================================================
+Task04
+
+INCLUDE irvine32.inc
+
+.data
+
+
+.code
+main PROC
+mov eax, 0
+mov ebx, 0
+mov ax, 0A78h
+
+shrd bx, ax, 4
+
+call dumpregs
+exit
+main ENDP
+END main
+
+
+
+======================================================================================
+
+Task05
+
+INCLUDE Irvine32.inc
+
+.data
+    val1 DWORD 5
+    val2 DWORD 3
+    val3 DWORD 2
+    val4 DWORD 1
+    pmp1 byte "The answer offset expression val1 = (val2 / val3) * (val1 / val2) is :",0
+
+.code
+main PROC
+     mov eax, val1
+     mul val2
+
+     mov ebx, eax
+     mov eax, val3
+     mul val4
+     mov ecx, eax
+     mov eax, ebx
+
+     div ecx
+     mov edx, offset pmp1
+     call writestring
+     call writedec
+
+
+    exit
+main ENDP
+
+END main
+==============================================================
+
+Task06
+
+INCLUDE Irvine32.inc
+
+.data
+int1 QWORD 12
+int2 QWORD 45
+result QWORD 0
+
+.code
+Extended_Add PROC
+    push ebp
+    mov ebp, esp
+
+    mov eax, [ebp + 8]     ; Load the low DWORD
+    mov edx, [ebp + 12]    ; Load the high DWORD
+
+    add eax, [ebp + 16]    ; Add the low DWORD
+    adc edx, [ebp + 20]    ; Add with carry for the high DWORD
+
+
+    pop ebp
+    ret
+Extended_Add ENDP
+
+main PROC
+    ; Call the Extended_Add procedure to add int1 and int2
+    lea eax, int1
+    lea ebx, int2
+    lea ecx, result
+    call Extended_Add
+
+    ; Display the result
+    mov edx, OFFSET result
+    call WriteHex
+    call Crlf
+
+    exit
+main ENDP
+
+END main
+==============================================================
+
+Task07
+
+INCLUDE Irvine32.inc
+
+.data
+fPrompt BYTE "Please enter an integer (To quit, enter -1): ",0
+pPrompt BYTE "The integer you have chosen is Prime. ",0
+cPrompt BYTE "The integer you have chosen is not Prime. ",0
+var1 DWORD ?  ; User input integer
+a DWORD ?     ; Remainder
+b DWORD ?     ; Half of var2
+
+.code
+main PROC
+    .REPEAT
+        mov edx, OFFSET fPrompt     ; Display a prompt
+        call WriteString
+        call ReadInt               ; Read user's number
+        mov var1, eax              ; Store user's number in var1
+
+        .IF var1 == -1             ; Check if user wants to quit
+            jmp L3
+        .ENDIF
+
+        call IsPrime               ; Call the IsPrime procedure
+
+    L3:
+    .UNTIL var1 == -1              ; Repeat until var1 == -1
+
+    ret                            ; Return from the main procedure
+main ENDP
+
+;---------------------------------------------------------
+IsPrime PROC
+;
+; Sets the Zero flag if the integer passed in EAX is prime
+; Receives: nothing
+; Returns: nothing
+;---------------------------------------------------------
+    mov ebx, 2                    ; Set the minimum divisor
+
+    mov eax, var1                 ; Set dividend
+    cdq                           ; Convert to 64-bit edx:eax
+    mov ecx, ebx                  ; Store divisor in ecx
+    div ecx                       ; Perform division
+    mov b, eax                    ; Get remainder, b is half of var2
+
+    .WHILE ebx != b               ; Loop until ebx has reached var1/2
+
+        mov eax, var1             ; Set dividend
+        cdq                       ; Convert to 64-bit edx:eax
+        mov ecx, ebx              ; Store divisor in ecx
+        div ecx                   ; Perform division
+        mov a, edx                ; Get remainder
+
+        .IF a == 0               ; If there was no remainder, then var1 is not prime
+            jmp L1                ; Jump out of the loop if above is correct
+        .ENDIF
+
+        inc ebx                   ; Increment until ebx reaches b
+
+    .ENDW
+
+    mov edx, OFFSET pPrompt       ; Tell the user their number is prime
+    call WriteString
+    jmp L2
+
+L1:
+    mov edx, OFFSET cPrompt       ; Tell the user their number is not prime
+    call WriteString
+
+L2: ret                           ; Return from IsPrime procedure
+IsPrime ENDP
+
+END main
+
+===================================================
+Task08
+
+INCLUDE Irvine32.inc
+INCLUDE Macros.inc
+BufSize = 80
+
+.data
+
+    key BYTE 6, 4, 1, 2, 7, 5, 2, 4, 3, 6
+    myText BYTE "This text is going to be encrypted.", 0
+
+    buffer BYTE BufSize DUP(?),0,0
+    stdInHandle HANDLE ?
+    bytesRead DWORD ?
+
+.code
+main PROC
+    ;Pass the pointer to the text string in EDX,
+    MOV EDX, OFFSET myText
+    
+    ;the array size to ECX
+    MOV ECX, SIZEOF myText
+    
+    ;pointer to the key array in ESI,    
+    MOV ESI, OFFSET key
+
+    ;the direction value (0 or 1) in EBX
+    MOV EBX, 0 ; rotate left for encryption
+
+    call WriteString
+    call Crlf
+
+    call encDecText
+
+    call WriteString
+    call Crlf
+
+    MOV EBX, 1
+    call encDecText
+
+    call WriteString
+    call Crlf
+
+    ;bonus - get string from console and encrypt
+    mWriteln "Write a text to be encrypted."
+    ; Get handle to standard input
+    INVOKE GetStdHandle, STD_INPUT_HANDLE
+    mov stdInHandle,eax
+    ; Wait for user input
+    INVOKE ReadConsole, stdInHandle, ADDR buffer,
+    BufSize, ADDR bytesRead, 0
+
+    ;encrypt and output to console
+    MOV EDX, OFFSET buffer
+    MOV ECX, BufSize
+    MOV EBX, 0
+    call encDecText
+    call WriteString
+    call Crlf
+
+    ;decrypt and output to console
+    MOV EBX, 1
+    call encDecText
+    call WriteString
+
+    INVOKE ExitProcess,0 ; end the program
+main ENDP
+
+encDecText PROC
+    ;Receives EDX - OFFSET of the text
+    ;         ECX - SIZE of the text
+    ;         ESI - OFFSET of the key
+    ;         EBX - rotation direction 0 for left 1 for right
+
+    PUSHAD
+
+    CMP EBX, 0
+    JE equals
+        MOV EBX, ESI
+        ADD EBX, 9 ;the length of key
+        loopNotEquals:
+
+        MOV AL, [EDX] ; value of the text
+        PUSH ECX
+        MOV CL, [ESI] ; value of the key
+        ROR AL, CL    ; ror the text by the key
+        MOV [EDX], AL
+        POP ECX
+
+        CMP ESI, EBX ; if all the keys are used, reset the offset so it uses the beginning
+        JE reset1
+        
+        INC ESI
+        
+        JMP endReset1
+        reset1:
+        SUB ESI, 9
+        endReset1:
+        
+        INC EDX
+        loop loopNotEquals
+
+        mWriteln "Input decrypted."
+    JMP endCMP
+    equals:
+        MOV EBX, ESI
+        ADD EBX, 9 ; the length of key
+        loopEquals:
+
+        MOV AL, [EDX] ; value of the text
+        PUSH ECX
+        MOV CL, [ESI] ; value of the key
+        ROL AL, CL    ; rol the text by the key
+        MOV [EDX], AL
+        POP ECX
+
+        CMP ESI, EBX ; if all the keys are used, reset the offset so it uses the beginning
+        JE reset2
+        INC ESI
+        
+        JMP endReset2
+        reset2:
+        SUB ESI, 9
+        endReset2:
+
+        INC EDX
+        loop loopEquals
+        mWriteln "Input encrypted."
+    endCMP:
+
+    POPAD
+    RET
+encDecText ENDP
+END main
+
+================================================================================================

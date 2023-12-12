@@ -1,0 +1,55 @@
+TITLE 22k-4489 (Task-06.asm)
+
+INCLUDE Irvine32.inc
+
+.data
+array word 10, 4, 7, 14, 299, 156, 3, 19, 29, 300, 20
+user byte "Sorted array: ",0
+pmp byte " ",0
+
+.code
+main proc
+     mov ecx, lengthof array
+     outer:
+           mov esi,0
+           cmp ecx,0
+           je print
+           dec ecx
+           inner:
+                 mov ax,[array+esi*2]
+                 mov bx,[array+((esi*2)+2)]
+                 cmp ax, bx
+                 ja swap
+                 here:
+                 inc esi
+                 cmp esi, lengthof array-1
+                 je outer
+           jmp inner
+
+    swap:
+    mov [array+esi*2],bx
+    mov [array+((esi*2)+2)],ax
+    jmp here
+
+    print:
+    mov edx, offset user
+    call writestring
+     mov ecx, lengthof array
+     mov esi,0
+    l1:
+    movzx eax, [array+esi*2]
+    call writedec
+    inc esi
+    mov edx ,offset pmp
+    call writestring
+    loop l1
+    exit
+
+
+
+
+exit
+main endp
+END main
+
+======================================================================================
